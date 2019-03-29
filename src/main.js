@@ -9,7 +9,7 @@ app.get("/home", (req,res) => {
 });
 
 app.listen(process.env.PORT || PORT, ()=> {
-    console.log("Listening to the port : " + process.env.PORT);
+    console.log("Listen at port : " + process.env.PORT);
 })
 
 process.on('uncaughtException', (err) => {
