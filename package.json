@@ -6,7 +6,8 @@
   "dependencies": {
     "config": "^3.0.1",
     "express": "^4.16.4",
-    "nodemon": "1.18.10"
+    "nodemon": "1.18.10",
+    "custom-env": "1.0.0"
   },
   "devDependencies": {},
   "scripts": {
