@@ -1,0 +1,26 @@
+{
+  "name": "pmm-server",
+  "version": "1.0.0",
+  "description": "Server para la plataforma de movilidad de mascotas.",
+  "main": "index.js",
+  "dependencies": {
+    "config": "^3.0.1",
+    "express": "^4.16.4",
+    "nodemon": "1.18.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node  src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tdp2-7547/pmm-server.git"
+  },
+  "author": "hernan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tdp2-7547/pmm-server/issues"
+  },
+  "homepage": "https://github.com/tdp2-7547/pmm-server#readme"
+}
