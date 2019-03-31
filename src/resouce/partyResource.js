@@ -1,4 +1,4 @@
-var party = require('../../src/model/party.js');
+var party = require("../model/party.js");
 
 var express = require("express");
 var app = express();
