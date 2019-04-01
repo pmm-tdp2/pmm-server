@@ -7,7 +7,10 @@
     "config": "^3.0.1",
     "express": "^4.16.4",
     "nodemon": "1.18.10",
-    "custom-env": "1.0.0"
+    "custom-env": "1.0.0",
+    "body-parse": "0.1.0",
+    "swagger-ui-express": "4.0.2",
+    "express-swagger-generator": "1.1.13"
   },
   "devDependencies": {},
   "scripts": {
