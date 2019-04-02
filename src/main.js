@@ -6,7 +6,8 @@ var travelResource = require("./resource/travelResource");
 // Create the application.
 const app = express();
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../swagger.json');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

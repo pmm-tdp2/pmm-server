@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: PMM-API
+host: localhost:8081
+basePath: "/"
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /drivers:
+    get:
+      x-swagger-router-controller: partyResource
+      parameters: []
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Model'
+definitions:
+  Array:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      license:
+        type: string
+  Model:
+    type: array
+    items:
+      $ref: '#/definitions/Array'
