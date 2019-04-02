@@ -5,6 +5,7 @@ var partyResource = require("./resource/partyResource");
 var travelResource = require("./resource/travelResource");  
 // Create the application.
 const app = express();
+
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
