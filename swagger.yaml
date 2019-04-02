@@ -20,9 +20,22 @@ paths:
         '200':
           description: Definition generated from Swagger Inspector
           schema:
-            $ref: '#/definitions/Model'
+            $ref: '#/definitions/Drivers'
+  /travels:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: '#/definitions/GeographicCoordenate'
+          x-examples:
+            application/json: "{\n\t\"longitude\": \"33.4\",\n\t\"latitude\":\"55.5\"\n}"
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
 definitions:
-  Array:
+  Driver:
     properties:
       firstName:
         type: string
@@ -30,7 +43,13 @@ definitions:
         type: string
       license:
         type: string
-  Model:
+  Drivers:
     type: array
     items:
-      $ref: '#/definitions/Array'
+      $ref: '#/definitions/Driver'
+  GeographicCoordenate:
+    properties:
+      longitude:
+        type: string
+      latitude:
+        type: string
