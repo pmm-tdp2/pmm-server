@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: "1.0"
   title: PMM-API
-host: https://young-wave-26125.herokuapp.com/
+host: young-wave-26125.herokuapp.com
 basePath: "/"
 schemes:
   - http
