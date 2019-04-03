@@ -34,6 +34,8 @@ paths:
       responses:
         '200':
           description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Driver'
 definitions:
   Driver:
     properties:
