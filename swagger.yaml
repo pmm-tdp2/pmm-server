@@ -36,6 +36,19 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/Driver'
+  /scores/{id}:
+    get:
+      x-swagger-router-controller: scoreResource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Score'
 definitions:
   Driver:
     properties:
@@ -54,4 +67,10 @@ definitions:
       longitude:
         type: string
       latitude:
+        type: string
+  Score:
+    properties:
+      point:
+        type: integer
+      description:
         type: string

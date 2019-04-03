@@ -1,8 +1,9 @@
 const express = require("express");
 const PORT = 3000;
 require ('custom-env').env('pmm');
-var partyResource = require("./resource/partyResource");
-var travelResource = require("./resource/travelResource");  
+var partyResource = require("./resource/partyResource"),
+    travelResource = require("./resource/travelResource"),
+    scoreResource = require("./resource/scoreResource");
 // Create the application.
 const app = express();
 
@@ -20,7 +21,7 @@ app.get("/home", (req,res) => {
 // Routing to other responsable to handle request
 app.use("", partyResource);
 app.use("", travelResource);
-
+app.use("", scoreResource);
 
 app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);

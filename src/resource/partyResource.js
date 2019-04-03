@@ -1,6 +1,6 @@
 var express = require("express"),
     app = express(),
-    party = require("../model/party.js"),
+    party = require("../model/party"),
     partyService = require("../service/partyServiceMock");
 
 app.get("/drivers", function(req, res) {
