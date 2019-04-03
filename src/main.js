@@ -24,7 +24,6 @@ app.use("", travelResource);
 
 app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
-    swaggerDocument.host=process.env.HOST;
 })
 
 process.on('uncaughtException', (err) => {
