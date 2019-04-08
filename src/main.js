@@ -28,7 +28,7 @@ app.use(express.static("public"));
 var server = app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
 })
-
+exports.server = server;
 io = require('socket.io').listen(server);
 
 var connectionsUsers = new Map();
@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
         text: "i'm a message",
         author: "app-server"
     });
+    exports.socket = socket;
 });
 
 
