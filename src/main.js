@@ -37,23 +37,24 @@ var connectionsDrivers = {};
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
-
+    socket.on('ROL', function(rol) {
+        var connection = new connectionModel.ConnectionInfo(socket.id, rol, socket);
+        if (rol == "USER") {
+            connectionsUsers[socket.id] = connection;
+        } else {
+            connectionsDrivers[socket.id] = connection;
+        }
+        console.log(connectionsUsers);
+        console.log(connectionsDrivers);
+    });
+    
     socket.emit("message", {
         id:1,
         text: "i'm a message",
         author: "app-server"
     });
 });
-io.on("ROL", (rol) => {
-    var connection = new connectionModel.ConnectionInfo(sockect.id, rol, sockect);
-    if (rol == "USER") {
-        connectionsUsers[id] = connection;
-    } else {
-        connectionsDrivers[id] = connection;
-    }
-    console.log(connectionsUsers);
-    console.log(connectionsDrivers);
-});
+
 
 process.on('uncaughtException', (err) => {
     console.log("========Uncaught exception========");
