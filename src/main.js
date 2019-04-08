@@ -31,30 +31,26 @@ var server = app.listen(process.env.PORT || PORT, ()=> {
 
 io = require('socket.io').listen(server);
 
-var connectionsUsers = {};
-var connectionsDrivers = {};
-var connectionDelete = {};
+var connectionsUsers = new Map();
+var connectionsDrivers = new Map();
+var connectionDelete = new Map();
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
     socket.on('ROL', function(rol) {
         var connection = new connectionModel.ConnectionInfo(socket.id, rol, socket);
         if (rol == "USER") {
-            connectionsUsers[socket.id] = connection;
+            connectionsUsers.set(socket.id,connection);
         } else {
-            connectionsDrivers[socket.id] = connection;
+            connectionsDrivers.set(socket.id,connection);
         }
         console.log(connectionsUsers);
         console.log(connectionsDrivers);
     });
-    socket.on('disconnect', (socket) => {
+    socket.on('disconnect', () => {
         console.log( 'user has left : ' + socket.id);
-        if (connectionsUsers[socket.id] != undefined) {
             connectionsUsers.delete(socket.id);
-        }
-        if (connectionsDrivers[socket.id] != undefined) {
             connectionsDrivers.delete(socket.id);
-        }
     });
     socket.emit("message", {
         id:1,
