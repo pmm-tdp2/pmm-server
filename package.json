@@ -7,12 +7,18 @@
     "config": "^3.0.1",
     "express": "^4.16.4",
     "nodemon": "1.18.10",
-    "custom-env": "1.0.0"
+    "custom-env": "1.0.0",
+    "body-parse": "0.1.0",
+    "swagger-ui-express": "4.0.2",
+    "express-swagger-generator": "1.1.13",
+    "yamljs": "0.3.0",
+    "socket.io": "^2.2.0",
+    "http": "0.0.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node  src/main.js"
+    "start": "nodemon  src/main.js"
   },
   "repository": {
     "type": "git",

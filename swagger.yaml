@@ -1,0 +1,96 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: PMM-API
+host: young-wave-26125.herokuapp.com
+basePath: "/"
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /drivers:
+    get:
+      x-swagger-router-controller: partyResource
+      parameters: []
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Drivers'
+  /travels:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: '#/definitions/TravelDTO'
+          x-examples:
+            application/json: |-
+              {
+                  "initialPosition" : {
+                      "latitude" :33,
+                      "longitude": 34
+                  },
+                  "finalPosition" : {
+                      "latitude" :33,
+                      "longitude": 34
+                  }
+              }
+      responses:
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+  /scores/{id}:
+    get:
+      x-swagger-router-controller: scoreResource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/ScoreDTO'
+definitions:
+  DriverDTO:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      license:
+        type: string
+  Drivers:
+    type: array
+    items:
+      $ref: '#/definitions/DriverDTO'
+  TravelDTO:
+    properties:
+      initialPosition: 
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      finalPosition: 
+        $ref: '#/definitions/GeographicCoordenateDTO'
+  GeographicCoordenateDTO:
+    properties:
+      longitude:
+        type: string
+      latitude:
+        type: string
+  ScoreDTO:
+    properties:
+      point:
+        type: integer
+      description:
+        type: string
