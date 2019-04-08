@@ -28,12 +28,18 @@ app.use(express.static("public"));
 var server = app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
 })
-exports.server = server;
+//exports.server = server;
 io = require('socket.io').listen(server);
 
 var connectionsUsers = new Map();
 var connectionsDrivers = new Map();
 var connectionDelete = new Map();
+
+var socketDriver;
+exports.socketDriver = socketDriver;
+
+ exports.users = connectionsUsers;
+ exports.drivers = connectionsDrivers;
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
@@ -43,10 +49,12 @@ io.on('connection', (socket) => {
             connectionsUsers.set(socket.id,connection);
         } else {
             connectionsDrivers.set(socket.id,connection);
+            socketDriver = socket;
         }
         console.log(connectionsUsers);
         console.log(connectionsDrivers);
     });
+
     socket.on('disconnect', () => {
         console.log( 'user has left : ' + socket.id);
             connectionsUsers.delete(socket.id);
@@ -57,7 +65,7 @@ io.on('connection', (socket) => {
         text: "i'm a message",
         author: "app-server"
     });
-    exports.socket = socket;
+
 });
 
 
