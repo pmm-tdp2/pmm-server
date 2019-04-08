@@ -23,19 +23,33 @@ paths:
             $ref: '#/definitions/Drivers'
   /travels:
     post:
+      consumes:
+        - application/json
+      produces:
+        - text/html
       parameters:
         - in: body
           name: body
           required: false
           schema:
-            $ref: '#/definitions/GeographicCoordenate'
+            $ref: '#/definitions/TravelDTO'
           x-examples:
-            application/json: "{\n\t\"longitude\": \"33.4\",\n\t\"latitude\":\"55.5\"\n}"
+            application/json: |-
+              {
+                  "initialPosition" : {
+                      "latitude" :33,
+                      "longitude": 34
+                  },
+                  "finalPosition" : {
+                      "latitude" :33,
+                      "longitude": 34
+                  }
+              }
       responses:
-        '200':
+        '500':
           description: Definition generated from Swagger Inspector
           schema:
-            $ref: '#/definitions/Driver'
+            type: string
   /scores/{id}:
     get:
       x-swagger-router-controller: scoreResource
@@ -48,9 +62,9 @@ paths:
         '200':
           description: Definition generated from Swagger Inspector
           schema:
-            $ref: '#/definitions/Score'
+            $ref: '#/definitions/ScoreDTO'
 definitions:
-  Driver:
+  DriverDTO:
     properties:
       firstName:
         type: string
@@ -61,14 +75,20 @@ definitions:
   Drivers:
     type: array
     items:
-      $ref: '#/definitions/Driver'
-  GeographicCoordenate:
+      $ref: '#/definitions/DriverDTO'
+  TravelDTO:
+    properties:
+      initialPosition: 
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      finalPosition: 
+        $ref: '#/definitions/GeographicCoordenateDTO'
+  GeographicCoordenateDTO:
     properties:
       longitude:
         type: string
       latitude:
         type: string
-  Score:
+  ScoreDTO:
     properties:
       point:
         type: integer
