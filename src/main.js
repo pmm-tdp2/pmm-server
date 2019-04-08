@@ -36,23 +36,23 @@ var connectionsDrivers = new Map();
 var connectionDelete = new Map();
 
 var socketDriver;
-exports.socketDriver = socketDriver;
 
- exports.users = connectionsUsers;
- exports.drivers = connectionsDrivers;
+exports.users = connectionsUsers;
+exports.drivers = connectionsDrivers;
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
     socket.on('ROL', function(rol) {
         var connection = new connectionModel.ConnectionInfo(socket.id, rol, socket);
         if (rol == "USER") {
+            console.log("Se conecto un Usuario");
             connectionsUsers.set(socket.id,connection);
         } else {
+            console.log("Se conecto un Chofer");
             connectionsDrivers.set(socket.id,connection);
             socketDriver = socket;
+            exports.socketDriver = socketDriver;
         }
-        console.log(connectionsUsers);
-        console.log(connectionsDrivers);
     });
 
     socket.on('disconnect', () => {
