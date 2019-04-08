@@ -33,7 +33,7 @@ io = require('socket.io').listen(server);
 
 var connectionsUsers = {};
 var connectionsDrivers = {};
-
+var connectionDelete = {};
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
@@ -47,7 +47,15 @@ io.on('connection', (socket) => {
         console.log(connectionsUsers);
         console.log(connectionsDrivers);
     });
-    
+    socket.on('disconnect', (socket) => {
+        console.log( 'user has left : ' + socket.id);
+        if (connectionsUsers[socket.id] != undefined) {
+            connectionsUsers.delete(socket.id);
+        }
+        if (connectionsDrivers[socket.id] != undefined) {
+            connectionsDrivers.delete(socket.id);
+        }
+    });
     socket.emit("message", {
         id:1,
         text: "i'm a message",
