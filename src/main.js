@@ -4,7 +4,7 @@ require ('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource");
-    connection = require("./model/connection");
+    connectionModel = require("./model/connection");
 var http = require("http");
 const app = express();
 
@@ -37,24 +37,23 @@ var connectionsDrivers = {};
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
-    socket.on("ROL", (rol) => {
-        var connection = new connection.ConnectionInfo(sockect.id, rol, sockect);
-        if (rol == "user") {
-            connectionsUsers[id] = connection;
-        } else {
-            connectionsDrivers[id] = connection;
-        }
-        console.log(connectionsUsers);
-        console.log(connectionsDrivers);
-    });
-    
+
     socket.emit("message", {
         id:1,
         text: "i'm a message",
         author: "app-server"
     });
 });
-
+io.on("ROL", (rol) => {
+    var connection = new connectionModel.ConnectionInfo(sockect.id, rol, sockect);
+    if (rol == "USER") {
+        connectionsUsers[id] = connection;
+    } else {
+        connectionsDrivers[id] = connection;
+    }
+    console.log(connectionsUsers);
+    console.log(connectionsDrivers);
+});
 
 process.on('uncaughtException', (err) => {
     console.log("========Uncaught exception========");
