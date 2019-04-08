@@ -37,7 +37,7 @@ var connectionsDrivers = {};
 
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
-    socket.on("rol", (rol) => {
+    socket.on("ROL", (rol) => {
         var connection = new connection.ConnectionInfo(sockect.id, rol, sockect);
         if (rol == "user") {
             connectionsUsers[id] = connection;
