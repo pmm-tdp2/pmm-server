@@ -5,9 +5,8 @@ var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource");
 var http = require("http");
-const app = express(),
-    server = http.createServer(app),
-    io = require('socket.io').listen(server);
+const app = express();
+    //server = http.createServer(app),
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -26,6 +25,13 @@ app.use("", travelResource);
 app.use("", scoreResource);
 app.use(express.static("public"));
 
+
+var server = app.listen(process.env.PORT || PORT, ()=> {
+    console.log("Listen at port : " + process.env.PORT);
+})
+
+io = require('socket.io').listen(server);
+
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
 
@@ -36,9 +42,6 @@ io.on('connection', (socket) => {
     });
 });
 
-app.listen(process.env.PORT || PORT, ()=> {
-    console.log("Listen at port : " + process.env.PORT);
-})
 
 process.on('uncaughtException', (err) => {
     console.log("========Uncaught exception========");
