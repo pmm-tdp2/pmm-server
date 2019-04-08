@@ -4,9 +4,9 @@ require ('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource");
+    connection = require("./model/connection");
 var http = require("http");
 const app = express();
-    //server = http.createServer(app),
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -25,16 +25,29 @@ app.use("", travelResource);
 app.use("", scoreResource);
 app.use(express.static("public"));
 
-
 var server = app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
 })
 
 io = require('socket.io').listen(server);
 
+var connectionsUsers = {};
+var connectionsDrivers = {};
+
+
 io.on('connection', (socket) => {
     console.log("one  connected :" + socket.id);
-
+    socket.listen("rol", (rol) => {
+        var connection = new connection.ConnectionInfo(sockect.id, rol, sockect);
+        if (rol == "user") {
+            connectionsUsers[id] = connection;
+        } else {
+            connectionsDrivers[id] = connection;
+        }
+        console.log(connectionsUsers);
+        console.log(connectionsDrivers);
+    });
+    
     socket.emit("message", {
         id:1,
         text: "i'm a message",
