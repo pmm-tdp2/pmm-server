@@ -4,10 +4,10 @@ require ('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource");
-// Create the application.
-const app = express();
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
+var http = require("http");
+const app = express(),
+    server = http.createServer(app),
+    io = require('socket.io').listen(server);
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
