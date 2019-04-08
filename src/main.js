@@ -15,7 +15,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get("/", (req,res) => {
+app.get("/home", (req,res) => {
     console.log("response " + req.url);
     res.send("hello !!!");
 });
@@ -26,8 +26,8 @@ app.use("", travelResource);
 app.use("", scoreResource);
 app.use(express.static("public"));
 
-io.on('connection', function(socket) {
-    console.log("one user connected :" + socket.id);
+io.on('connection', (socket) => {
+    console.log("one  connected :" + socket.id);
 
     socket.emit("message", {
         id:1,
