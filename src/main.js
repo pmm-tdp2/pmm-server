@@ -6,6 +6,8 @@ var partyResource = require("./resource/partyResource"),
     scoreResource = require("./resource/scoreResource");
 // Create the application.
 const app = express();
+var http = require("http").Server(app);
+var io = require("socket.io")(http);
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -13,15 +15,26 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get("/home", (req,res) => {
+app.get("/", (req,res) => {
     console.log("response " + req.url);
-    res.send("Hello World !!!")
+    res.send("hello !!!");
 });
 
 // Routing to other responsable to handle request
 app.use("", partyResource);
 app.use("", travelResource);
 app.use("", scoreResource);
+app.use(express.static("public"));
+
+io.on('connection', function(socket) {
+    console.log("one user connected :" + socket.id);
+
+    socket.emit("message", {
+        id:1,
+        text: "i'm a message",
+        author: "app-server"
+    });
+});
 
 app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
