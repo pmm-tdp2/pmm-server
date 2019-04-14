@@ -1,7 +1,7 @@
 var express = require("express"),
     app = express(),
     scoreModel = require("../model/score"),
-    scoreService = require("../service/scoreServiceMock"),
+    scoreService = require("../service/mock/scoreServiceMock"),
     parser = require("body-parser");
 
 app.get("/score/:id", function(req, res) {

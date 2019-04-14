@@ -3,8 +3,10 @@ const PORT = 3000;
 require ('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
-    scoreResource = require("./resource/scoreResource");
-    connectionModel = require("./model/connection");
+    scoreResource = require("./resource/scoreResource"),
+    traceResource = require("./resource/traceResource"),
+    connectionModel = require("./model/connection"),
+    bodyParser = require("body-parser");
 const app = express();
 
 const swaggerUi = require('swagger-ui-express');
@@ -17,11 +19,13 @@ app.get("/home", (req,res) => {
     console.log("response " + req.url);
     res.send("hello !!!");
 });
-
+// parse application/json
+app.use(bodyParser.json())
 // Routing to other responsable to handle request
 app.use("/pmm", partyResource);
 app.use("/pmm", travelResource);
 app.use("/pmm", scoreResource);
+app.use("/pmm", traceResource);
 app.use(express.static("public"));
 
 var server = app.listen(process.env.PORT || PORT, ()=> {

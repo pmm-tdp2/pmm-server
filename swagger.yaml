@@ -101,7 +101,41 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             type: string
-
+  /trace:
+    post:
+      tags:
+        - Trace
+      summary: Add a new trace
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          description: Trace object that needs to be added to Travel trace 
+          required: true
+          schema:
+            $ref: '#/definitions/TraceDTO'
+          x-examples:
+                application/json: |-
+                  {
+                      "userId" : "userId",
+                      "driverId" : "driverId",
+                      "geograficCoodenate": { 
+                        "latitude": 32,
+                        "longitude": 43
+                      }
+                  }
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: string
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
 definitions:
   DriverDTO:
     properties:
@@ -133,3 +167,11 @@ definitions:
         type: integer
       description:
         type: string
+  TraceDTO:
+    properties:
+      userId:
+        type: string
+      driverId:
+        type: string
+      geograficCoordenate:
+        $ref: '#/definitions/GeographicCoordenateDTO'

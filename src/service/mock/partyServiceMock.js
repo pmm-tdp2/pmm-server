@@ -1,4 +1,4 @@
-var party = require("../model/party");
+var party = require("../../model/party");
 
 exports.findAllDrivers = function findAllDrivers(){
     console.log("partyServiceMock: findAllDrivers");
