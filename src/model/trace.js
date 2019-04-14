@@ -22,9 +22,6 @@ exports.Trace = class Trace {
             geograficCoodenateMap.set('longitude', longitude);
             this.geograficCoordenate = new traveModel.GeographicCoordenate(geograficCoodenateMap);
         } else {
-            /*
-             * Is a json
-            */
             this.userId = arg.userId;
             this.driverId = arg.driverId
             this.geograficCoordenate = new traveModel.GeographicCoordenate(arg.geograficCoordenate);

@@ -8,9 +8,6 @@ exports.GeographicCoordenate = class GeographicCoordenate {
                 this.longitude = arg.get('longitude');
             }
         } else {
-            /*
-             * Is a json
-            */
             this.latitude = arg.latitude;
             this.longitude = arg.longitude;
         }

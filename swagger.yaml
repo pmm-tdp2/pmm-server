@@ -37,18 +37,19 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/TravelDTO'
+            $ref: '#/definitions/DriverSearchDTO'
           x-examples:
             application/json: |-
               {
-                  "initialPosition" : {
-                      "latitude" :33,
-                      "longitude": 34
-                  },
-                  "finalPosition" : {
-                      "latitude" :33,
-                      "longitude": 34
-                  }
+                "userId" : "user1",
+                "from" : {
+                    "latitude" : "23",
+                    "longitude": "21"
+                },
+                "to" : {
+                    "latitude" : "12",
+                    "longitude": "34"
+                }
               }
       responses:
         '500':
@@ -149,6 +150,14 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/DriverDTO'
+  DriverSearchDTO:
+    properties:
+      userId:
+        type: string
+      from:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      to:
+        $ref: '#/definitions/GeographicCoordenateDTO'
   TravelDTO:
     properties:
       initialPosition: 
