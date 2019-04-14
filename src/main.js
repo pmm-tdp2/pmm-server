@@ -19,9 +19,9 @@ app.get("/home", (req,res) => {
 });
 
 // Routing to other responsable to handle request
-app.use("", partyResource);
-app.use("", travelResource);
-app.use("", scoreResource);
+app.use("/pmm", partyResource);
+app.use("/pmm", travelResource);
+app.use("/pmm", scoreResource);
 app.use(express.static("public"));
 
 var server = app.listen(process.env.PORT || PORT, ()=> {
