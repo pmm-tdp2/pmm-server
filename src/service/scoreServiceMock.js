@@ -3,9 +3,13 @@ parser = require("body-parser"),
 
 exports.findScoreById = function findScoreById(id) {
     console.log("scoreServiceMock: findScoreById");
-    var json = {"point" : 5, "description": "great driver"};
+    var json = {"points" : 5, "description": "great driver"};
     var argmap = new Map();
     argmap.set('json', json);
     var score = new scoreModel.Score(argmap);
     return score;
+};
+exports.saveScore = function saveScore(score) {
+    console.log("scoreServiceMock: saveScore");
+    return "ok";
 }

@@ -35,7 +35,7 @@ paths:
       parameters:
         - in: body
           name: body
-          required: false
+          required: true
           schema:
             $ref: '#/definitions/TravelDTO'
           x-examples:
@@ -55,10 +55,10 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             type: string
-  /scores/{id}:
+  /score/{id}:
     get:
       tags:
-        - Scores
+        - Score
       x-swagger-router-controller: scoreResource
       parameters:
         - in: path
@@ -70,6 +70,38 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/ScoreDTO'
+  /score:
+    post:
+      tags:
+        - Score
+      summary: Add a new score
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          description: Score object that needs to be added to the Scores
+          required: true
+          schema:
+            $ref: '#/definitions/ScoreDTO'
+          x-examples:
+                application/json: |-
+                  {
+                      "points" : 5,
+                      "description" : "nice driver"
+                  }
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: string
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+
 definitions:
   DriverDTO:
     properties:
@@ -97,7 +129,7 @@ definitions:
         type: string
   ScoreDTO:
     properties:
-      point:
+      points:
         type: integer
       description:
         type: string

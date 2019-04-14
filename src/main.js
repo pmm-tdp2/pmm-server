@@ -5,7 +5,6 @@ var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource");
     connectionModel = require("./model/connection");
-var http = require("http");
 const app = express();
 
 const swaggerUi = require('swagger-ui-express');
@@ -28,7 +27,7 @@ app.use(express.static("public"));
 var server = app.listen(process.env.PORT || PORT, ()=> {
     console.log("Listen at port : " + process.env.PORT);
 })
-//exports.server = server;
+
 io = require('socket.io').listen(server);
 
 var connectionsUsers = new Map();
