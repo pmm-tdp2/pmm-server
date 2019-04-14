@@ -1,15 +1,17 @@
 exports.Score = class Score {
-    constructor(argmap) {
-        if (argmap.has('json')) {
-            this.point = argmap.get('json').point;
-            this.description = argmap.get('json').description;
+    constructor(arg) {
+        if (arg instanceof Map) {
+            if (arg.has('points')) {
+                this.points = arg.get('points');
+            }
+            if (arg.has('description')) {
+                this.description = arg.get('description');
+            }
         } else {
-            if (argmap.has('point')) {
-                this.point = argmap.get('point');
-            }
-            if (argmap.has('description')) {
-                this.description = argmap.get('description');
-            }
+            console.log(arg);
+            var object = JSON.parse(arg);
+            this.points = object.points;
+            this.description = object.description;
         }
     }
 }

@@ -1,15 +1,15 @@
 exports.GeographicCoordenate = class GeographicCoordenate {
-    constructor(argmap) {
-        if (argmap.has('json')) {
-            this.latitude = argmap.get('json').latitude;
-            this.longitude = argmap.get('json').longitude;
+    constructor(arg) {
+        if (arg instanceof Map) {
+            if (arg.has('latitude')) {
+                this.latitude = arg.get('latitude');
+            }
+            if (arg.has('longitude')) {
+                this.longitude = arg.get('longitude');
+            }
         } else {
-            if (argmap.has('latitude')) {
-                this.latitude = argmap.get('latitude');
-            }
-            if (argmap.has('longitude')) {
-                this.longitude = argmap.get('longitude');
-            }
+            this.latitude = arg.latitude;
+            this.longitude = arg.longitude;
         }
     }
 }

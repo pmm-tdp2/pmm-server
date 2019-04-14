@@ -2,8 +2,9 @@ swagger: "2.0"
 info:
   version: "1.0"
   title: PMM-API
-host: young-wave-26125.herokuapp.com
-basePath: "/"
+  description: Definición de enpoints del servidor PMM
+host: localhost:8081
+basePath: "/pmm"
 schemes:
   - http
   - https
@@ -14,6 +15,8 @@ produces:
 paths:
   /drivers:
     get:
+      tags:
+        - Drivers
       x-swagger-router-controller: partyResource
       parameters: []
       responses:
@@ -23,6 +26,8 @@ paths:
             $ref: '#/definitions/Drivers'
   /travels:
     post:
+      tags:
+        - Travels
       consumes:
         - application/json
       produces:
@@ -30,28 +35,31 @@ paths:
       parameters:
         - in: body
           name: body
-          required: false
+          required: true
           schema:
-            $ref: '#/definitions/TravelDTO'
+            $ref: '#/definitions/DriverSearchDTO'
           x-examples:
             application/json: |-
               {
-                  "initialPosition" : {
-                      "latitude" :33,
-                      "longitude": 34
-                  },
-                  "finalPosition" : {
-                      "latitude" :33,
-                      "longitude": 34
-                  }
+                "userId" : "user1",
+                "from" : {
+                    "latitude" : "23",
+                    "longitude": "21"
+                },
+                "to" : {
+                    "latitude" : "12",
+                    "longitude": "34"
+                }
               }
       responses:
         '500':
           description: Definition generated from Swagger Inspector
           schema:
             type: string
-  /scores/{id}:
+  /score/{id}:
     get:
+      tags:
+        - Score
       x-swagger-router-controller: scoreResource
       parameters:
         - in: path
@@ -63,6 +71,72 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/ScoreDTO'
+  /score:
+    post:
+      tags:
+        - Score
+      summary: Add a new score
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          description: Score object that needs to be added to the Scores
+          required: true
+          schema:
+            $ref: '#/definitions/ScoreDTO'
+          x-examples:
+                application/json: |-
+                  {
+                      "points" : 5,
+                      "description" : "nice driver"
+                  }
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: string
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+  /trace:
+    post:
+      tags:
+        - Trace
+      summary: Add a new trace
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          description: Trace object that needs to be added to Travel trace 
+          required: true
+          schema:
+            $ref: '#/definitions/TraceDTO'
+          x-examples:
+                application/json: |-
+                  {
+                      "userId" : "userId",
+                      "driverId" : "driverId",
+                      "geograficCoodenate": { 
+                        "latitude": 32,
+                        "longitude": 43
+                      }
+                  }
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: string
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
 definitions:
   DriverDTO:
     properties:
@@ -76,6 +150,14 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/DriverDTO'
+  DriverSearchDTO:
+    properties:
+      userId:
+        type: string
+      from:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      to:
+        $ref: '#/definitions/GeographicCoordenateDTO'
   TravelDTO:
     properties:
       initialPosition: 
@@ -90,7 +172,15 @@ definitions:
         type: string
   ScoreDTO:
     properties:
-      point:
+      points:
         type: integer
       description:
         type: string
+  TraceDTO:
+    properties:
+      userId:
+        type: string
+      driverId:
+        type: string
+      geograficCoordenate:
+        $ref: '#/definitions/GeographicCoordenateDTO'
