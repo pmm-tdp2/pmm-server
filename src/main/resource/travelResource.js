@@ -1,5 +1,3 @@
-require('console-info');
-require('console-error');
 var travel = require("../model/travel"),
     partyDTOModel = require("../model/dto/partyDTO"),
     express = require("express"),
@@ -11,14 +9,13 @@ var allSockets = require("../main");
 app.use(parser.json());
 
 app.post("/travels", function (req, res) {
-    console.info("TravelResource :" + req.url+ ". Body : " + JSON.stringify(req.body));
+    console.log("TravelResource :" + req.url+ ". Body : " + JSON.stringify(req.body));
     var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
-
     if (allSockets.socketDriver == undefined) {
-        console.error("no hay nada");
-        res.status(204).send("{}");
+        console.log("no hay nada");
+        res.status(500).send("NO HAY CHOFERES");
     } else {
-        console.info("hay algo");
+        console.log("hay algo");
         // logica de mandar el emit al chofer
         allSockets.socketDriver.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
         res.status(200).send(travelService.findDriver(driverSearchDTO));

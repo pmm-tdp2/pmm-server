@@ -1,5 +1,3 @@
-require('console-info');
-require('console-error');
 const express = require("express");
 const PORT = 3000;
 require ('custom-env').env('pmm');
@@ -18,7 +16,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/home", (req,res) => {
-    console.info("response " + req.url);
+    console.log("response " + req.url);
     res.send("hello !!!");
 });
 // parse application/json
@@ -31,11 +29,10 @@ app.use("/pmm", traceResource);
 app.use(express.static("public"));
 
 var server = app.listen(process.env.PORT || PORT, ()=> {
-    console.info("Listen at port : " + process.env.PORT);
+    console.log("Listen at port : " + process.env.PORT);
 })
 
 io = require('socket.io').listen(server);
-io.set('transports', ['websocket']);
 
 var connectionsUsers = new Map();
 var connectionsDrivers = new Map();
@@ -47,13 +44,14 @@ exports.users = connectionsUsers;
 exports.drivers = connectionsDrivers;
 
 io.on('connection', (socket) => {
+    console.log("one  connected :" + socket.id);
     socket.on('ROL', function(rol) {
         var connection = new connectionModel.ConnectionInfo(socket.id, rol, socket);
         if (rol == "USER") {
-            console.info("User is connected " + socket.id);
+            console.log("Se conecto un Usuario");
             connectionsUsers.set(socket.id,connection);
         } else {
-            console.info("Driver is connected " + socket.id);
+            console.log("Se conecto un Chofer");
             connectionsDrivers.set(socket.id,connection);
             socketDriver = socket;
             exports.socketDriver = socketDriver;
@@ -61,15 +59,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        if (connectionsUsers.has(socket.id)) {
-            console.info( 'user has left : ' + socket.id);
+        console.log( 'user has left : ' + socket.id);
             connectionsUsers.delete(socket.id);
-        }
-        if (connectionsDrivers.has(socket.id)) {
-            console.info( 'driver has left : ' + socket.id);
             connectionsDrivers.delete(socket.id);
-        }
-        socket.disconnect(true);
     });
     socket.emit("message", {
         id:1,
@@ -81,8 +73,8 @@ io.on('connection', (socket) => {
 
 
 process.on('uncaughtException', (err) => {
-    console.error("========Uncaught exception========");
-    console.error(err);
+    console.log("========Uncaught exception========");
+    console.log(err);
 });
 
 module.exports = app;
