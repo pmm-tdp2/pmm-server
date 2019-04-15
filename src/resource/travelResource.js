@@ -16,7 +16,7 @@ app.post("/travels", function (req, res) {
 
     if (allSockets.socketDriver == undefined) {
         console.error("no hay nada");
-        res.status(204).send("{}");
+        res.status(203).send({status:203, message:"no data"});
     } else {
         console.info("hay algo");
         // logica de mandar el emit al chofer
