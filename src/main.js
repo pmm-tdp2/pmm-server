@@ -33,6 +33,7 @@ var server = app.listen(process.env.PORT || PORT, ()=> {
 })
 
 io = require('socket.io').listen(server);
+io.set('transports', ['websocket']);
 
 var connectionsUsers = new Map();
 var connectionsDrivers = new Map();
