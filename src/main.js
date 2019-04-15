@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
             console.info("User is connected " + socket.id);
             connectionsUsers.set(socket.id,connection);
         } else {
-            console.info("Driver is connected " + socket.id);
+            console.info("Driver is connected  " + socket.id);
             connectionsDrivers.set(socket.id,connection);
             socketDriver = socket;
             exports.socketDriver = socketDriver;
