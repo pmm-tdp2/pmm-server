@@ -12,7 +12,8 @@
     "swagger-ui-express": "4.0.2",
     "express-swagger-generator": "1.1.13",
     "yamljs": "0.3.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "console-info": "0.0.5"
   },
   "devDependencies": {},
   "scripts": {

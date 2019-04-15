@@ -1,8 +1,7 @@
-require('console-info');
 var party = require("../../model/party");
 
 exports.findAllDrivers = function findAllDrivers(){
-    console.info("partyServiceMock: findAllDrivers");
+    console.log("partyServiceMock: findAllDrivers");
     var driver1 = new party.Driver("Michael", "Schumacher", "999999991");
     var driver2 = new party.Driver("Juan Manuel", "Fangio", "999999992");
     var driver3 = new party.Driver("Lewis", "Hamilton", "999999993");
