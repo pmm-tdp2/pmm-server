@@ -13,7 +13,8 @@
     "express-swagger-generator": "1.1.13",
     "yamljs": "0.3.0",
     "socket.io": "^2.2.0",
-    "console-info": "0.0.5"
+    "console-info": "0.0.5",
+    "console-error": "0.0.4"
   },
   "devDependencies": {},
   "scripts": {

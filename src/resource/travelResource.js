@@ -1,4 +1,5 @@
 require('console-info');
+require('console-error');
 var travel = require("../model/travel"),
     partyDTOModel = require("../model/dto/partyDTO"),
     express = require("express"),

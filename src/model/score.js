@@ -8,7 +8,6 @@ exports.Score = class Score {
                 this.description = arg.get('description');
             }
         } else {
-            console.log(arg);
             var object = JSON.parse(arg);
             this.points = object.points;
             this.description = object.description;

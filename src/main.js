@@ -1,4 +1,5 @@
 require('console-info');
+require('console-error');
 const express = require("express");
 const PORT = 3000;
 require ('custom-env').env('pmm');
