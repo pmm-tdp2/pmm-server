@@ -21,7 +21,7 @@ app.post("/travels", function (req, res) {
         console.info("hay algo");
         // logica de mandar el emit al chofer
         allSockets.socketDriver.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
-        res.status(200).send(travelService.findDriver(driverSearchDTO));
+        res.status(200).send({status:200, message:travelService.findDriver(driverSearchDTO)});
     }
 })
 
