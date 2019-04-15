@@ -59,9 +59,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log( 'user has left : ' + socket.id);
+        if (connectionsUsers.has(socket.id)) {
+            console.info( 'user has left : ' + socket.id);
             connectionsUsers.delete(socket.id);
+        }
+        if (connectionsDrivers.has(socket.id)) {
+            console.info( 'driver has left : ' + socket.id);
             connectionsDrivers.delete(socket.id);
+        }
     });
     socket.emit("message", {
         id:1,

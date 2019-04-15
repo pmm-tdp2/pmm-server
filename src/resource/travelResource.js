@@ -11,9 +11,10 @@ app.use(parser.json());
 app.post("/travels", function (req, res) {
     console.log("TravelResource :" + req.url+ ". Body : " + JSON.stringify(req.body));
     var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
+
     if (allSockets.socketDriver == undefined) {
-        console.log("no hay nada");
-        res.status(500).send("NO HAY CHOFERES");
+        console.error("no hay nada");
+        res.status(204).send("{}");
     } else {
         console.log("hay algo");
         // logica de mandar el emit al chofer
