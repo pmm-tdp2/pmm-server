@@ -49,7 +49,11 @@ paths:
                 "to" : {
                     "latitude" : "12",
                     "longitude": "34"
-                }
+                },
+                "petSmallAmount" : 1,
+                "petMediumAmount" : 1,
+                "petLargeAmount" : 1,
+                "hasACompanion" : true
               }
       responses:
         '500':
@@ -158,6 +162,14 @@ definitions:
         $ref: '#/definitions/GeographicCoordenateDTO'
       to:
         $ref: '#/definitions/GeographicCoordenateDTO'
+      petSmallAmount:
+        type: integer
+      petMediumAmount:
+        type: integer
+      petLargeAmount:
+        type: integer
+      hasACompanion:
+        type: boolean
   TravelDTO:
     properties:
       initialPosition: 
