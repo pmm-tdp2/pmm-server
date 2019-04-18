@@ -23,5 +23,6 @@ exports.findTravel = function findTravel(driverSearchDTO) {
     var travel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
     travel.price = haversine(driverSearchDTO.from, driverSearchDTO.to) * process.env.PRIZE_PER_KM;
     // travel.driverID = driver.id;
+    travels.set(travelID, travel);
     return travel;
 }
