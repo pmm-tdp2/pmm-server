@@ -29,7 +29,7 @@ app.post("/travels", function (req, res) {
     } else {
         console.info("hay algo");
         // logica de mandar el emit al chofer
-        allSockets.socketDriver.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
+        aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
         res.status(200).send(travelService.findDriver(driverSearchDTO));
     }
 })

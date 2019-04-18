@@ -2,7 +2,7 @@ require('console-info');
 require('console-error');
 const express = require("express");
 const PORT = 3000;
-require ('custom-env').env('pmm');
+require('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource"),
@@ -17,7 +17,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get("/home", (req,res) => {
+app.get("/home", (req, res) => {
     console.info("response " + req.url);
     res.send("hello !!!");
 });
@@ -30,7 +30,7 @@ app.use("/pmm", scoreResource);
 app.use("/pmm", traceResource);
 app.use(express.static("public"));
 
-var server = app.listen(process.env.PORT || PORT, ()=> {
+var server = app.listen(process.env.PORT || PORT, () => {
     console.info("Listen at port : " + process.env.PORT);
 })
 
@@ -42,7 +42,7 @@ var connectionDrivers = new Map();
 var connectionDelete = new Map();
 
 io.on('connection', (socket) => {
-    socket.on('ROL', function(rol) {
+    socket.on('ROL', function (rol) {
         var connection = new connectionModel.ConnectionInfo(socket.id, rol, socket);
         if (rol == "USER") {
             console.info("User is connected " + socket.id);
@@ -57,19 +57,19 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         if (connectionUsers.has(socket.id)) {
-            console.info( 'user has left : ' + socket.id);
+            console.info('user has left : ' + socket.id);
             connectionDelete.set(socket.id, connectionUsers.get(socket.id));
             connectionUsers.delete(socket.id);
         }
         if (connectionDrivers.has(socket.id)) {
-            console.info( 'driver has left : ' + socket.id);
+            console.info('driver has left : ' + socket.id);
             connectionDelete.set(socket.id, connectionDrivers.get(socket.id));
             connectionDrivers.delete(socket.id);
         }
         socket.disconnect(true);
     });
     socket.emit("message", {
-        id:1,
+        id: 1,
         text: "i'm a message",
         author: "app-server"
     });
