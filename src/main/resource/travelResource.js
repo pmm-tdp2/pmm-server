@@ -25,7 +25,7 @@ app.post("/travels", function (req, res) {
     }
     if (aConnectionDriver == null || aConnectionDriver == undefined) {
         console.error("no hay nada");
-        res.status(203).send({status:203, message:"no data"});
+        res.status(204).send({status:204, message:"no data"});
     } else {
         console.info("hay algo");
         // logica de mandar el emit al chofer
