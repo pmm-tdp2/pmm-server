@@ -1,12 +1,12 @@
 require('console-info');
 require('console-error');
-var travelModel = require("../model/travel"),
-    partyDTOModel = require("../model/dto/partyDTO"),
+var partyDTOModel = require("../model/dto/partyDTO"),
     express = require("express"),
     app = express(),
     parser = require("body-parser"),
-    travelService = require("../service/mock/travelServiceMock");
-var allSockets = require("../main");
+    travelService = require("../service/mock/travelServiceMock"),
+    allSockets = require("../main"),
+    travelDTOModel = require('../model/dto/travelDTO');
 
 app.use(parser.json());
 app.put("/travels/", function (req, res) {
@@ -33,11 +33,12 @@ app.post("/travels", function (req, res) {
     } else {
         console.info("hay algo");
         // logica de mandar el emit al chofer
-        var aDriver = travelService.findDriver(driverSearchDTO);
-        var aTravel = new travelModel.Travel(driverSearchDTO.from, driverSearchDTO.to);
-
+        var aTravel = travelService.findTravel(driverSearchDTO);
+        var aTravelDTO = new travelDTOModel.TravelDTO();
+        aTravelDTO.id = aTravel.id;
+        aTravelDTO.price = aTravel.price;
         aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
-        res.status(200).send(aDriver);
+        res.status(200).send(aTravelDTO);
     }
 })
 

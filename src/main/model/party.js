@@ -1,5 +1,6 @@
 class Party {
     constructor(firstName, lastName) {
+        this.id;
         this.firstName = firstName;
         this.lastName = lastName;
     }

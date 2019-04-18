@@ -14,13 +14,14 @@ exports.GeographicCoordenate = class GeographicCoordenate {
     }
 }
 exports.Travel = class Travel {
-    constructor(from, to) {
-        this.id;
+    constructor(id, from, to) {
+        this.id = id;
         this.from = from;
         this.to = to;
         this.driverId;
         this.userId;
         this.time;
+        this.price;
         this.status = [];
     }
 }

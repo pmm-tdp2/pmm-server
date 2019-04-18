@@ -60,6 +60,10 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             type: string
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/TravelCotizationDTO'
   /score/{id}:
     get:
       tags:
@@ -176,6 +180,12 @@ definitions:
         $ref: '#/definitions/GeographicCoordenateDTO'
       finalPosition: 
         $ref: '#/definitions/GeographicCoordenateDTO'
+  TravelCotizationDTO:
+    properties:
+      id:
+        type: integer
+      price:
+        type: string
   GeographicCoordenateDTO:
     properties:
       longitude:

@@ -1,13 +1,27 @@
 require('console-info');
 require('console-error');
-var travel = require("../../model/travel"),
-    party = require("../../model/party.js"),
-    partyDTOModel = require("../../model/dto/partyDTO"),
-    partyService = require("../mock/partyServiceMock");
-var travels = new Map();
+require('custom-env').env('pmm');
 
+var travelModel = require("../../model/travel"),
+    partyService = require("../mock/partyServiceMock"),
+    global = require('../../util/util'),
+    haversine = require('haversine');
+
+var travels = new Map();
+var travelID = 0;
+    
 exports.findDriver = function findDriver(driverSearchDTO) {
     console.info("travelServiceMock: findDriver");
     var driver = partyService.findAllDrivers().pop(); 
     return driver;
+}
+
+exports.findTravel = function findTravel(driverSearchDTO) {
+    console.info("travelServiceMock: findTravel");
+    // var driver = partyService.findAllDrivers().pop();
+    travelID = global.incrementID(travelID);
+    var travel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
+    travel.price = haversine(driverSearchDTO.from, driverSearchDTO.to) * process.env.PRIZE_PER_KM;
+    // travel.driverID = driver.id;
+    return travel;
 }
