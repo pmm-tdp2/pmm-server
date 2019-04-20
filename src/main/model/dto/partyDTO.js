@@ -35,3 +35,23 @@ exports.DriverSearchDTO = class DriverSearchDTO {
         }
     }
 }
+
+class PartyDTO {
+    constructor() {
+        this.id;
+        this.firstName;
+        this.lastName;
+    }
+}
+
+exports.DriverDTO = class Driver extends Party {
+    constructor() {
+        this.license;
+    }
+}
+
+exports.UserDTO = class User extends Party {
+    constructor() {
+        super();
+    }
+}

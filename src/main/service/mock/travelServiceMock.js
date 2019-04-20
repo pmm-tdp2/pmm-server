@@ -10,21 +10,27 @@ var travelModel = require("../../model/travel"),
 var travels = new Map();
 var travelID = 0;
     
-exports.findDriver = function findDriver(driverSearchDTO) {
+exports.findDriver = function findDriver(travelID) {
     console.info("travelServiceMock: findDriver");
     var driver = partyService.findAllDrivers().pop(); 
     return driver;
 }
 
-exports.findTravel = function findTravel(driverSearchDTO) {
-    console.info("travelServiceMock: findTravel");
+exports.findDriver = function findDriver(travelID) {
+    console.info("travelServiceMock: findDriver");
+    var user = partyService.findAllUsers().pop(); 
+    return user;
+}
+
+exports.createATravel = function createATravel(driverSearchDTO) {
+    console.info("travelServiceMock: createATravel");
     // var driver = partyService.findAllDrivers().pop();
     travelID = global.incrementID(travelID);
-    var travel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
-    travel.price = haversine(driverSearchDTO.from, driverSearchDTO.to) * process.env.PRIZE_PER_KM;
-    // travel.driverID = driver.id;
-    travels.set(travelID, travel);
-    return travel;
+    var aTravel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
+    aTravel.price = haversine(driverSearchDTO.from, driverSearchDTO.to) * process.env.PRIZE_PER_KM;
+    // aTravel.driverID = driver.id;
+    travels.set(travelID, aTravel);
+    return aTravel;
 }
 
 exports.findTravelByTravelID = function findTravelByTravelID(travelID) {

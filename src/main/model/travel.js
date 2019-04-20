@@ -20,6 +20,10 @@ exports.Travel = class Travel {
         this.to = to;
         this.driverId;
         this.userId;
+        this.petAmountSmall;
+        this.petAmountMedium;
+        this.petAmountLarge;
+        this.hasACompanion;
         this.time;
         this.price;
         this.status = [];

@@ -33,47 +33,62 @@ app.post("/travel/cotization", function (req, res) {
     } else {
         console.info("hay algo");
         // logica de mandar el emit al chofer
-        var aTravel = travelService.findTravel(driverSearchDTO);
-        var aTravelDTO = new travelDTOModel.TravelDTO();
-        aTravelDTO.travelID = aTravel.travelID;
-        aTravelDTO.price = aTravel.price;
-        aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
-        res.status(200).send(aTravelDTO);
+        var aTravel = travelService.createATravel(driverSearchDTO);
+        var aTravelCotizationDTO = new travelDTOModel.TravelCotizationDTO();
+        aTravelCotizationDTO.travelID = aTravel.travelID;
+        aTravelCotizationDTO.price = aTravel.price;
+        res.status(200).send(aTravelCotizationDTO);
     }
 });
 
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
-    /* 
-* INPUT: travelID
-		* NOTIFICACION al chofer: {travelId, from, to, petAmountSmall, petAmountMedium, petAmountLarge, isCompanion}
-	*OUTPUT: {200, "message: esperar notificacion confirmar"}
-*/
-
-    var travelID = req.body.travelID;
+    var request = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
     var connectionDrives = allSockets.connectionDrivers;
     var aConnectionDriver = null;
-    try {
-        if (connectionDrives != undefined) {
-            aConnectionDriver = connectionDrives.values().next().value; 
+    if (request.rol == "USER") {
+        try {
+            if (connectionDrives != undefined) {
+                aConnectionDriver = connectionDrives.values().next().value; 
+            }
+        } catch (err) {
+            console.error(err);
         }
-    } catch (err) {
-        console.error(err);
-    }
-    if (aConnectionDriver == null || aConnectionDriver == undefined) {
-        console.error("no hay nada");
-        res.status(204).send({status:204, message:"no data"});
-    } else {
-        console.info("hay algo");
-        // logica de mandar el emit al chofer
-        var aTravel = travelService.findTravelByTravelID(travelID);
+        if (aConnectionDriver == null || aConnectionDriver == undefined) {
+            console.error("no hay nada");
+            res.status(204).send({status:204, message:"no data"});
+        } else {
+            console.info("hay algo");
+            // logica de mandar el emit al chofer
+            var aTravel = travelService.findTravelByTravelID(travelID);
+            
+            var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
+            aTravelNotificationDTO.travelID = aTravel.travelID;
+            aTravelNotificationDTO.from = aTravel.from;
+            aTravelNotificationDTO.to = aTravel.to;
+            aTravelNotificationDTO.petAmountSmall = aTravel.petAmountSmall;
+            aTravelNotificationDTO.petAmountMedium = aTravel.petAmountMedium;
+            aTravelNotificationDTO.petAmountLarge = aTravel.petAmountLarge;
+            aTravelNotificationDTO.hasACompanion = aTravel.hasACompanion;
+            aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
+            
+/*
+* ESPERAR A QUE CONFIRME EL CLIENTE
+*/
 
-        var aTravelDTO = new travelDTOModel.TravelDTO();
-        aTravelDTO.travelID = aTravel.travelID;
-        aTravelDTO.price = aTravel.price;
-        aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
-        res.status(200).send(aTravelDTO);
+
+            var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
+            aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
+            aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.travelID);
+            aTravelConfirmationResponseDTO.user = travelService.finUser(aTravel.travelID)
+            aTravelConfirmationResponseDTO.time = 5;
+    
+            res.status(200).send(aTravelConfirmationResponseDTO);
+        }        
+    } 
+    if (request.rol == "DRIVER") {
+    
     }
 })
 
