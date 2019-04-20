@@ -15,7 +15,7 @@ exports.GeographicCoordenate = class GeographicCoordenate {
 }
 exports.Travel = class Travel {
     constructor(id, from, to) {
-        this.id = id;
+        this.travelID = id;
         this.from = from;
         this.to = to;
         this.driverId;

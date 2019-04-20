@@ -26,3 +26,12 @@ exports.findTravel = function findTravel(driverSearchDTO) {
     travels.set(travelID, travel);
     return travel;
 }
+
+exports.findTravelByTravelID = function findTravelByTravelID(travelID) {
+    console.info("travelServiceMock: findTravelByTravelID");
+    var aTravel = null;
+    if (travels.has(travelID)) {
+        aTravel = travels.get(travelID);
+    }
+    return aTravel;
+}

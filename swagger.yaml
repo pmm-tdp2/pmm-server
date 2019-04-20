@@ -13,10 +13,10 @@ consumes:
 produces:
   - application/json
 paths:
-  /drivers:
+  /driver:
     get:
       tags:
-        - Drivers
+        - Driver
       x-swagger-router-controller: partyResource
       parameters: []
       responses:
@@ -24,10 +24,10 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/Drivers'
-  /travels:
+  /travel/cotization:
     post:
       tags:
-        - Travels
+        - Travel
       consumes:
         - application/json
       produces:
@@ -182,7 +182,7 @@ definitions:
         $ref: '#/definitions/GeographicCoordenateDTO'
   TravelCotizationDTO:
     properties:
-      id:
+      travelID:
         type: integer
       price:
         type: string
