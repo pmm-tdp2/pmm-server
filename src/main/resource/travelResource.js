@@ -16,7 +16,10 @@ app.put("/travel/", function (req, res) {
 
 app.post("/travel/cotization", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
-    var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
+
+    res.status(200).send({price:500, travelID:"travel001"});
+
+    /*var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
     var connectionDrives = allSockets.connectionDrivers;
     var aConnectionDriver = null;
@@ -39,7 +42,7 @@ app.post("/travel/cotization", function (req, res) {
         aTravelDTO.price = aTravel.price;
         aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", "tenes un viaje....");
         res.status(200).send(aTravelDTO);
-    }
+    }*/
 });
 
 app.post("/travel/confirmation", function (req, res) {
