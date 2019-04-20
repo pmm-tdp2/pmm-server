@@ -14,8 +14,14 @@ exports.GeographicCoordenate = class GeographicCoordenate {
     }
 }
 exports.Travel = class Travel {
-    constructor(initial, destination) {
-        this.initial = initial;
-        this.destination = destination;
+    constructor(id, from, to) {
+        this.travelID = id;
+        this.from = from;
+        this.to = to;
+        this.driverId;
+        this.userId;
+        this.time;
+        this.price;
+        this.status = [];
     }
 }

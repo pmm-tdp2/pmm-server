@@ -5,7 +5,7 @@ var express = require("express"),
     party = require("../model/party"),
     partyService = require("../service/mock/partyServiceMock");
 
-app.get("/drivers", function(req, res) {
+app.get("/driver", function(req, res) {
     console.info("PartyResource " + req.url)
     var drivers = partyService.findAllDrivers();
     res.setHeader('Content-Type', 'application/json');
