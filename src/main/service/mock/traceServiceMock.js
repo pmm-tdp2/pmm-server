@@ -5,5 +5,5 @@ parser = require("body-parser"),
 
 exports.saveTrace = function saveTrace(trace) {
     console.info("traceServiceMock: saveTrace");
-    return "ok";
+    return {code:200, message:"recived"};
 }

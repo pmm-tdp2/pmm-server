@@ -16,29 +16,13 @@ app.put("/travel/", function (req, res) {
 
 app.post("/travel/cotization", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
-    var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
-    var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
-    var aConnectionDriver = null;
-    try {
-        if (connectionDrives != undefined) {
-            aConnectionDriver = connectionDrives.values().next().value; 
-        }
-    } catch (err) {
-        console.error(err);
-    }
-    if (aConnectionDriver == null || aConnectionDriver == undefined) {
-        console.error("no hay nada");
-        res.status(204).send({status:204, message:"no data"});
-    } else {
-        console.info("hay algo");
-        // logica de mandar el emit al chofer
-        var aTravel = travelService.createATravel(driverSearchDTO);
-        var aTravelCotizationDTO = new travelDTOModel.TravelCotizationDTO();
-        aTravelCotizationDTO.travelID = aTravel.travelID;
-        aTravelCotizationDTO.price = aTravel.price;
-        res.status(200).send(aTravelCotizationDTO);
-    }
+
+    driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
+    var aTravel = travelService.findTravel(driverSearchDTO);
+    var aTravelDTO = new travelDTOModel.TravelDTO();
+    aTravelDTO.travelID = aTravel.travelID;
+    aTravelDTO.price = Math.trunc(aTravel.price);
+    res.status(200).send(aTravelDTO);
 });
 
 app.post("/travel/confirmation", function (req, res) {
