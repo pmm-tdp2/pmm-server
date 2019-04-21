@@ -21,9 +21,9 @@ module.exports = {
     },
     
     findDriver : function findDriver(driverID) {
-        console.info("travelServiceMock: findDriver");
+        console.info("travelServiceMock: findDriver " + driverID);
         var driver = partyService.findAllDrivers().find(function(driver) {
-            return driver.id = driverID;
+            return driver.id == driverID;
         }); 
         return driver;
     },

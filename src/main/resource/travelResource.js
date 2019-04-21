@@ -60,12 +60,12 @@ app.post("/travel/confirmation", function (req, res) {
             console.error(err);
         }
         if (aConnectionDriver == null || aConnectionDriver == undefined) {
-            console.error("no hay nada");
-            res.status(204).send({status:204, message:"no data"});
+            console.error("There are not Drivers");
+            res.status(204).send({status:204, message:"There are not Drivers"});
         } else {
-            console.info("hay algo");
+            console.info("Available Driver");
             // logica de mandar el emit al chofer
-            var aTravel = travelService.findTravelByTravelID(rol.travelID);
+            var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
             
             var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
             aTravelNotificationDTO.travelID = aTravel.travelID;
@@ -75,37 +75,48 @@ app.post("/travel/confirmation", function (req, res) {
             aTravelNotificationDTO.petAmountMedium = aTravel.petAmountMedium;
             aTravelNotificationDTO.petAmountLarge = aTravel.petAmountLarge;
             aTravelNotificationDTO.hasACompanion = aTravel.hasACompanion;
-            aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
-            
-/*
-* ESPERAR A QUE CONFIRME EL CHOFER
-*/
 
+            aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
 
             var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
             aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
-            aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.travelID);
-            aTravelConfirmationResponseDTO.user = travelService.finUser(aTravel.travelID)
-            aTravelConfirmationResponseDTO.time = 5;
+            aTravelConfirmationResponseDTO.driver = travelService.findDriver(aConnectionDriver.id);
+            aTravelConfirmationResponseDTO.time = aTravel.time;
     
             res.status(200).send(aTravelConfirmationResponseDTO);
         }        
     } 
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
         try {
-            /*
-            * Precondition: Call travel/cotization
-            */
-            var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
-            var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
-            aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
-            aTravelConfirmationResponseDTO.time = aTravel.time;
-            res.status(200).send(aTravelConfirmationResponseDTO);
-        } catch (error) {
-            res.status(500).send(error);
+            if (connectionUsers != undefined) {
+                aConnectionUser = connectionUsers.values().next().value; 
+            }
+        } catch (err) {
+            console.error(err);
         }
-        
+        if (aConnectionUser == null || aConnectionUser == undefined) {
+            console.error("There are no Users");
+            res.status(204).send({status:204, message:"There are not Users"});
+        } else {
+            console.info("Available User");
+            // logica de mandar el emit al chofer
+            var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
+            try {
+                var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
+                aTravel.driverID = aTravelConfirmationRequestDTO.id;
+                var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
+                aTravelConfirmationResponseDTO.time = aTravel.time;
+                aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.driverID)
+                aConnectionUser.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelConfirmationResponseDTO);
+
+                aTravelConfirmationResponseDTO.driver = null;
+                aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
+                res.status(200).send(aTravelConfirmationResponseDTO);
+            } catch (error) {
+                res.status(500).send(error);
+            }
+        }
     }
-})
+});
   
 module.exports = app;
