@@ -3,11 +3,11 @@ var traveModel = require('../model/travel');
 exports.Trace = class Trace {
     constructor(arg) {
         if (arg instanceof Map) {
-            if (arg.has('userId')) {
-                this.from = arg.get('userId');
+            if (arg.has('userID')) {
+                this.from = arg.get('userID');
             }
-            if (arg.has('driverId')) {
-                this.to = arg.get('driverId');
+            if (arg.has('driverID')) {
+                this.to = arg.get('driverID');
             }
             var latitude = undefined;
             var longitude = undefined;
@@ -22,8 +22,8 @@ exports.Trace = class Trace {
             geograficCoodenateMap.set('longitude', longitude);
             this.geograficCoordenate = new traveModel.GeographicCoordenate(geograficCoodenateMap);
         } else {
-            this.userId = arg.userId;
-            this.driverId = arg.driverId
+            this.userID = arg.userID;
+            this.driverID = arg.driverID
             this.geograficCoordenate = new traveModel.GeographicCoordenate(arg.geograficCoordenate);
         }
     }

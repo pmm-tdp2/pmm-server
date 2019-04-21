@@ -30,8 +30,8 @@ module.exports = {
             this.travelID = id;
             this.from = from;
             this.to = to;
-            this.driverId;
-            this.userId;
+            this.driverID;
+            this.userID;
             this.petAmountSmall;
             this.petAmountMedium;
             this.petAmountLarge;

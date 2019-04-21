@@ -10,7 +10,11 @@ app.get("/score/:id", function(req, res) {
     console.info("ScoreResource :" + req.url+ ". Param : " + req.params.id);
     try {
         var score = scoreService.findScoreById(req.params.id);
-        res.status(200).send(score);
+        if (score == null) {
+            res.status(204).send(score);
+        } else {
+            res.status(200).send(score);
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send(error);

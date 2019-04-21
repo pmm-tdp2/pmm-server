@@ -20,15 +20,19 @@ module.exports = {
         return aTravel;
     },
     
-    findDriver : function findDriver(travelID) {
+    findDriver : function findDriver(driverID) {
         console.info("travelServiceMock: findDriver");
-        var driver = partyService.findAllDrivers().pop(); 
+        var driver = partyService.findAllDrivers().find(function(driver) {
+            return driver.id = driverID;
+        }); 
         return driver;
     },
     
-    findUser : function findUser(travelID) {
+    findUser : function findUser(userID) {
         console.info("travelServiceMock: findUser");
-        var user = partyService.findAllUsers().pop(); 
+        var user = partyService.findAllUsers().find(function(user) {
+            return user.id == userID;
+        }); 
         return user;
     },
     
@@ -36,13 +40,13 @@ module.exports = {
         console.info("travelServiceMock: createATravel");
         travelID = global.incrementID(travelID);
         var aTravel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
+        aTravel.userID = driverSearchDTO.userID;
         aTravel.distance = haversine(driverSearchDTO.from, driverSearchDTO.to);
         aTravel.time = aTravel.distance / process.env.TIME_PER_KM;
         aTravel.price = aTravel.distance * process.env.PRICE_PER_KM;
         if (!travels.has(travelID)) {
             travels.set(travelID, aTravel);
         }
-        console.info(travels);
         return aTravel;
     },
     

@@ -71,7 +71,7 @@ paths:
           x-examples:
             application/json: |-
               {
-                "userId" : "user1",
+                "userID" : 1,
                 "from" : {
                     "latitude" : "23",
                     "longitude": "21"
@@ -189,8 +189,8 @@ paths:
           x-examples:
                 application/json: |-
                   {
-                      "userId" : "userId",
-                      "driverId" : "driverId",
+                      "userID" : 1,
+                      "driverID" : 1,
                       "geograficCoodenate": { 
                         "latitude": 32,
                         "longitude": 43
@@ -236,8 +236,8 @@ definitions:
         type: string
   DriverSearchDTO:
     properties:
-      userId:
-        type: string
+      userID:
+        type: integer
       from:
         $ref: '#/definitions/GeographicCoordenateDTO'
       to:
@@ -322,9 +322,9 @@ definitions:
         type: string
   TraceDTO:
     properties:
-      userId:
-        type: string
-      driverId:
-        type: string
+      userID:
+        type: integer
+      driverID:
+        type: integer
       geograficCoordenate:
         $ref: '#/definitions/GeographicCoordenateDTO'

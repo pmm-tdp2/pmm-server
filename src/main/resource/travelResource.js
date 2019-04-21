@@ -14,7 +14,11 @@ app.get("/travel/:id", function(req, res) {
     console.info("TravelResource :" + req.url+ ". Param : " + req.params.id);
     try {
         var aTravel = travelService.findTravelById(parseInt(req.params.id));
-        res.status(200).send(aTravel);
+        if (aTravel == null) {
+            res.status(204).send(aTravel);
+        } else {
+            res.status(200).send(aTravel);
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send(error);
@@ -88,11 +92,9 @@ app.post("/travel/confirmation", function (req, res) {
         }        
     } 
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
-        console.info("hay algo");
         var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
         var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
-        console.info(aTravelConfirmationRequestDTO);
-        aTravelConfirmationResponseDTO.user = travelService.findUser(aTravelConfirmationRequestDTO.id)
+        aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
         aTravelConfirmationResponseDTO.time = aTravel.time;
         res.status(200).send(aTravelConfirmationResponseDTO);
     }
