@@ -13,17 +13,47 @@ consumes:
 produces:
   - application/json
 paths:
-  /driver:
+  /drivers:
     get:
       tags:
-        - Driver
+        - Party
       x-swagger-router-controller: partyResource
       parameters: []
       responses:
         '200':
           description: Definition generated from Swagger Inspector
           schema:
-            $ref: '#/definitions/Drivers'
+            type: array
+            items:
+              $ref: '#/definitions/DriverDTO'
+  /users:
+    get:
+      tags:
+        - Party
+      x-swagger-router-controller: partyResource
+      parameters: []
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserDTO'
+  /travel/{id}:
+    get:
+      tags:
+        - Travel
+      x-swagger-router-controller: travelResource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Travel'
   /travel/cotization:
     post:
       tags:
@@ -41,7 +71,7 @@ paths:
           x-examples:
             application/json: |-
               {
-                "userId" : "user1",
+                "userID" : 1,
                 "from" : {
                     "latitude" : "23",
                     "longitude": "21"
@@ -64,6 +94,36 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/TravelCotizationDTO'
+  /travel/confirmation:
+    post:
+      tags:
+        - Travel
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/TravelConfirmationRequestDTO'
+          x-examples:
+            application/json: |-
+              {
+                "travelID" : "1",
+                "rol" : "USER",
+                "id" : 1
+              }
+      responses:
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/TravelConfirmationResponseDTO'
   /score/{id}:
     get:
       tags:
@@ -129,8 +189,8 @@ paths:
           x-examples:
                 application/json: |-
                   {
-                      "userId" : "userId",
-                      "driverId" : "driverId",
+                      "userID" : 1,
+                      "driverID" : 1,
                       "geograficCoodenate": { 
                         "latitude": 32,
                         "longitude": 43
@@ -147,21 +207,37 @@ paths:
             type: string
 definitions:
   DriverDTO:
+    tags:
+      - partyDTO
     properties:
+      id:
+        type: integer
       firstName:
         type: string
       lastName:
         type: string
       license:
         type: string
-  Drivers:
-    type: array
-    items:
-      $ref: '#/definitions/DriverDTO'
+  UserDTO:
+    tags:
+      - partyDTO
+    properties:
+      id:
+        type: integer
+      firstName:
+        type: string
+      lastName:
+        type: string
+  GeographicCoordenateDTO:
+    properties:
+      longitude:
+        type: string
+      latitude:
+        type: string
   DriverSearchDTO:
     properties:
-      userId:
-        type: string
+      userID:
+        type: integer
       from:
         $ref: '#/definitions/GeographicCoordenateDTO'
       to:
@@ -174,35 +250,81 @@ definitions:
         type: integer
       hasACompanion:
         type: boolean
-  TravelDTO:
-    properties:
-      initialPosition: 
-        $ref: '#/definitions/GeographicCoordenateDTO'
-      finalPosition: 
-        $ref: '#/definitions/GeographicCoordenateDTO'
   TravelCotizationDTO:
     properties:
       travelID:
         type: integer
       price:
         type: string
-  GeographicCoordenateDTO:
+  TravelConfirmationRequestDTO:
     properties:
-      longitude:
+      travelID:
+        type: integer
+      rol:
         type: string
-      latitude:
+      id:
+        type: integer
+  TravelConfirmationResponseDTO:
+    properties:
+      travelID:
+        type: integer
+      user:
+        $ref: '#/definitions/UserDTO'
+      driver:
+        $ref: '#/definitions/DriverDTO'
+      time:
         type: string
+  TravelStatus:
+    properties:
+      id:
+        type: integer
+      description:
+        type: string
+  Travel:
+    properties:
+      travelID:
+        type: integer
+      from:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      to:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      driverID:
+        type: integer
+      userID:
+        type: integer
+      petSmallAmount:
+        type: integer
+      petMediumAmount:
+        type: integer
+      petLargeAmount:
+        type: integer
+      hasACompanion:
+        type: boolean
+      distance:
+        type: string
+      time:
+        type: string
+      price:
+        type: string
+      status:
+        type: array
+        items:
+          $ref: '#/definitions/TravelStatus'
   ScoreDTO:
     properties:
+      travelID:
+        type: integer
+      rol:
+        type: string
       points:
         type: integer
       description:
         type: string
   TraceDTO:
     properties:
-      userId:
-        type: string
-      driverId:
-        type: string
+      userID:
+        type: integer
+      driverID:
+        type: integer
       geograficCoordenate:
         $ref: '#/definitions/GeographicCoordenateDTO'
