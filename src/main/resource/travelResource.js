@@ -17,37 +17,24 @@ app.put("/travel/", function (req, res) {
 app.post("/travel/cotization", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
-    var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
-    var aConnectionDriver = null;
     try {
-        if (connectionDrives != undefined) {
-            aConnectionDriver = connectionDrives.values().next().value; 
-        }
-    } catch (err) {
-        console.error(err);
-    }
-    if (aConnectionDriver == null || aConnectionDriver == undefined) {
-        console.error("no hay nada");
-        res.status(204).send({status:204, message:"no data"});
-    } else {
-        console.info("hay algo");
-        // logica de mandar el emit al chofer
         var aTravel = travelService.createATravel(driverSearchDTO);
         var aTravelCotizationDTO = new travelDTOModel.TravelCotizationDTO();
         aTravelCotizationDTO.travelID = aTravel.travelID;
         aTravelCotizationDTO.price = aTravel.price;
         res.status(200).send(aTravelCotizationDTO);
+    } catch (error) {
+        res.status(500).send(error);
     }
 });
 
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
-    var request = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
+    var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
     var connectionDrives = allSockets.connectionDrivers;
     var aConnectionDriver = null;
-    if (request.rol == "USER") {
+    if (aTravelConfirmationRequestDTO.rol == "USER") {
         try {
             if (connectionDrives != undefined) {
                 aConnectionDriver = connectionDrives.values().next().value; 
@@ -61,7 +48,7 @@ app.post("/travel/confirmation", function (req, res) {
         } else {
             console.info("hay algo");
             // logica de mandar el emit al chofer
-            var aTravel = travelService.findTravelByTravelID(travelID);
+            var aTravel = travelService.findTravelByTravelID(rol.travelID);
             
             var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
             aTravelNotificationDTO.travelID = aTravel.travelID;
@@ -74,7 +61,7 @@ app.post("/travel/confirmation", function (req, res) {
             aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
             
 /*
-* ESPERAR A QUE CONFIRME EL CLIENTE
+* ESPERAR A QUE CONFIRME EL CHOFER
 */
 
 
@@ -87,9 +74,14 @@ app.post("/travel/confirmation", function (req, res) {
             res.status(200).send(aTravelConfirmationResponseDTO);
         }        
     } 
-    if (request.rol == "DRIVER") {
-    
+    if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
+        console.info("hay algo");
+        var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
+        var aTravelConfirmationResponseDTO = travelDTOModel.TravelConfirmationResponseDTO();
+        aTravelConfirmationResponseDTO.user = travelService.finUser(aTravelConfirmationRequestDTO.travelID)
+        aTravelConfirmationResponseDTO.time = aTravel.time;
+        res.status(200).send(aTravelConfirmationResponseDTO);
     }
 })
-
+  
 module.exports = app;

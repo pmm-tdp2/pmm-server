@@ -1,3 +1,7 @@
+var baseModel = require('../model/base') 
+
+var status = undefined;
+
 exports.GeographicCoordenate = class GeographicCoordenate {
     constructor(arg) {
         if (arg instanceof Map) {
@@ -13,6 +17,13 @@ exports.GeographicCoordenate = class GeographicCoordenate {
         }
     }
 }
+
+exports.Statu = class Statu extends baseModel.Base {
+    constructor() {
+        super();
+    }
+} 
+
 exports.Travel = class Travel {
     constructor(id, from, to) {
         this.travelID = id;
@@ -24,8 +35,23 @@ exports.Travel = class Travel {
         this.petAmountMedium;
         this.petAmountLarge;
         this.hasACompanion;
+        this.distance;
         this.time;
         this.price;
-        this.status = [];
+        this.status = new Map();
     }
+}
+
+exports.getAllStatus = function getAllStatus() {
+    if (status === undefined) {
+        var cotizated = new Status(1, "cotizated");
+        var userConfirmated = new Status(2, "user confirmated");
+        var driverConfirmated = new Status(3, "driver confirmated");
+        var finalized = new Status(4, "finalized");
+        status.set(1, cotizated);
+        status.set(2, userConfirmated);
+        status.set(3, driverConfirmated);
+        status.set(4, finalized);
+    }
+    return status;
 }

@@ -44,13 +44,14 @@ class PartyDTO {
     }
 }
 
-exports.DriverDTO = class Driver extends Party {
+exports.DriverDTO = class DriverDTO extends PartyDTO {
     constructor() {
+        super();
         this.license;
     }
 }
 
-exports.UserDTO = class User extends Party {
+exports.UserDTO = class UserDTO extends PartyDTO {
     constructor() {
         super();
     }

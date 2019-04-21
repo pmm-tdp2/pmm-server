@@ -24,12 +24,14 @@ exports.findDriver = function findDriver(travelID) {
 
 exports.createATravel = function createATravel(driverSearchDTO) {
     console.info("travelServiceMock: createATravel");
-    // var driver = partyService.findAllDrivers().pop();
     travelID = global.incrementID(travelID);
     var aTravel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
-    aTravel.price = haversine(driverSearchDTO.from, driverSearchDTO.to) * process.env.PRIZE_PER_KM;
-    // aTravel.driverID = driver.id;
-    travels.set(travelID, aTravel);
+    aTravel.distance = haversine(driverSearchDTO.from, driverSearchDTO.to);
+    aTravel.time = aTravel / process.env.TIME_PER_KM;
+    aTravel.price = aTravel.distance * process.env.PRICE_PER_KM;
+    if (!travels.has(travelID)) {
+        travels.set(travelID, aTravel);
+    }
     return aTravel;
 }
 
@@ -39,5 +41,13 @@ exports.findTravelByTravelID = function findTravelByTravelID(travelID) {
     if (travels.has(travelID)) {
         aTravel = travels.get(travelID);
     }
+    return aTravel;
+}
+
+exports.confirmTravel = function confirmTravel(travelID) {
+    // logica de mandar el emit al chofer
+    var aTravel = findTravelByTravelID(travelID);
+    var driverConfirmatedStatus = travelModel.getAllStatus().get(3);
+    aTravel.status.set(3, driverConfirmatedStatus);
     return aTravel;
 }
