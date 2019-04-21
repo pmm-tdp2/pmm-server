@@ -162,6 +162,8 @@ paths:
             type: string
 definitions:
   DriverDTO:
+    tags:
+      - partyDTO
     properties:
       id:
         type: integer
@@ -172,12 +174,20 @@ definitions:
       license:
         type: string
   UserDTO:
+    tags:
+      - partyDTO
     properties:
       id:
         type: integer
       firstName:
         type: string
       lastName:
+        type: string
+  GeographicCoordenateDTO:
+    properties:
+      longitude:
+        type: string
+      latitude:
         type: string
   DriverSearchDTO:
     properties:
@@ -201,11 +211,23 @@ definitions:
         type: integer
       price:
         type: string
-  GeographicCoordenateDTO:
+  TravelConfirmationRequestDTO:
     properties:
-      longitude:
+      travelID:
+        type: integer
+      rol:
         type: string
-      latitude:
+      id:
+        type: integer
+  TravelConfirmationResponseDTO:
+    properties:
+      travelID:
+        type: integer
+      user:
+        $ref: '#/definitions/UserDTO'
+      driver:
+        $ref: '#/definitions/DriverDTO'
+      time:
         type: string
   ScoreDTO:
     properties:
