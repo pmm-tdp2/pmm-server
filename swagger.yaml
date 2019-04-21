@@ -39,6 +39,21 @@ paths:
             type: array
             items:
               $ref: '#/definitions/UserDTO'
+  /travel/{id}:
+    get:
+      tags:
+        - Travel
+      x-swagger-router-controller: travelResource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/Travel'
   /travel/cotization:
     post:
       tags:
@@ -79,6 +94,36 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/TravelCotizationDTO'
+  /travel/confirmation:
+    post:
+      tags:
+        - Travel
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/TravelConfirmationRequestDTO'
+          x-examples:
+            application/json: |-
+              {
+                "travelID" : "1",
+                "rol" : "USER",
+                "id" : 1
+              }
+      responses:
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: '#/definitions/TravelConfirmationResponseDTO'
   /score/{id}:
     get:
       tags:
@@ -229,6 +274,42 @@ definitions:
         $ref: '#/definitions/DriverDTO'
       time:
         type: string
+  TravelStatus:
+    properties:
+      id:
+        type: integer
+      description:
+        type: string
+  Travel:
+    properties:
+      travelID:
+        type: integer
+      from:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      to:
+        $ref: '#/definitions/GeographicCoordenateDTO'
+      driverID:
+        type: integer
+      userID:
+        type: integer
+      petSmallAmount:
+        type: integer
+      petMediumAmount:
+        type: integer
+      petLargeAmount:
+        type: integer
+      hasACompanion:
+        type: boolean
+      distance:
+        type: string
+      time:
+        type: string
+      price:
+        type: string
+      status:
+        type: array
+        items:
+          $ref: '#/definitions/TravelStatus'
   ScoreDTO:
     properties:
       travelID:

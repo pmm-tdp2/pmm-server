@@ -1,57 +1,60 @@
 var baseModel = require('../model/base') 
 
-var status = undefined;
+var states = null;
 
-exports.GeographicCoordenate = class GeographicCoordenate {
-    constructor(arg) {
-        if (arg instanceof Map) {
-            if (arg.has('latitude')) {
-                this.latitude = arg.get('latitude');
+module.exports = {
+    GeographicCoordenate : class GeographicCoordenate {
+        constructor(arg) {
+            if (arg instanceof Map) {
+                if (arg.has('latitude')) {
+                    this.latitude = arg.get('latitude');
+                }
+                if (arg.has('longitude')) {
+                    this.longitude = arg.get('longitude');
+                }
+            } else {
+                this.latitude = arg.latitude;
+                this.longitude = arg.longitude;
             }
-            if (arg.has('longitude')) {
-                this.longitude = arg.get('longitude');
-            }
-        } else {
-            this.latitude = arg.latitude;
-            this.longitude = arg.longitude;
         }
+    },
+    
+    State : class State extends baseModel.Base {
+        constructor() {
+            super();
+        }
+    },
+    
+    Travel : class Travel {
+        constructor(id, from, to) {
+            this.travelID = id;
+            this.from = from;
+            this.to = to;
+            this.driverId;
+            this.userId;
+            this.petAmountSmall;
+            this.petAmountMedium;
+            this.petAmountLarge;
+            this.hasACompanion;
+            this.distance;
+            this.time;
+            this.price;
+            this.states = [];
+        }
+    },
+    
+    getAllStates : function getAllStates() {
+        if (states == null) {
+            states = new Map();
+            var cotizated = new  this.State(1, "cotizated");
+            var userConfirmated = new this.State(2, "user confirmated");
+            var driverConfirmated = new this.State(3, "driver confirmated");
+            var finalized = new this.State(4, "finalized");
+            states.set(1, cotizated);
+            states.set(2, userConfirmated);
+            states.set(3, driverConfirmated);
+            states.set(4, finalized);
+        }
+        return states;
     }
-}
-
-exports.Statu = class Statu extends baseModel.Base {
-    constructor() {
-        super();
-    }
-} 
-
-exports.Travel = class Travel {
-    constructor(id, from, to) {
-        this.travelID = id;
-        this.from = from;
-        this.to = to;
-        this.driverId;
-        this.userId;
-        this.petAmountSmall;
-        this.petAmountMedium;
-        this.petAmountLarge;
-        this.hasACompanion;
-        this.distance;
-        this.time;
-        this.price;
-        this.status = new Map();
-    }
-}
-
-exports.getAllStatus = function getAllStatus() {
-    if (status === undefined) {
-        var cotizated = new Status(1, "cotizated");
-        var userConfirmated = new Status(2, "user confirmated");
-        var driverConfirmated = new Status(3, "driver confirmated");
-        var finalized = new Status(4, "finalized");
-        status.set(1, cotizated);
-        status.set(2, userConfirmated);
-        status.set(3, driverConfirmated);
-        status.set(4, finalized);
-    }
-    return status;
 }

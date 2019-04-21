@@ -16,6 +16,7 @@ app.get("/score/:id", function(req, res) {
         res.status(500).send(error);
     }
 });
+
 app.post("/score", function(req, res) {
     console.info("ScoreResource :" + req.url+ ". Body : " + JSON.stringify(req.body));
     try {

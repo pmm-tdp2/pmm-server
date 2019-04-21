@@ -9,6 +9,19 @@ var partyDTOModel = require("../model/dto/partyDTO"),
     travelDTOModel = require('../model/dto/travelDTO');
 
 app.use(parser.json());
+
+app.get("/travel/:id", function(req, res) {
+    console.info("TravelResource :" + req.url+ ". Param : " + req.params.id);
+    try {
+        var aTravel = travelService.findTravelById(parseInt(req.params.id));
+        res.status(200).send(aTravel);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+
 app.put("/travel/", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
 
@@ -77,8 +90,9 @@ app.post("/travel/confirmation", function (req, res) {
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
         console.info("hay algo");
         var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
-        var aTravelConfirmationResponseDTO = travelDTOModel.TravelConfirmationResponseDTO();
-        aTravelConfirmationResponseDTO.user = travelService.finUser(aTravelConfirmationRequestDTO.travelID)
+        var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
+        console.info(aTravelConfirmationRequestDTO);
+        aTravelConfirmationResponseDTO.user = travelService.findUser(aTravelConfirmationRequestDTO.id)
         aTravelConfirmationResponseDTO.time = aTravel.time;
         res.status(200).send(aTravelConfirmationResponseDTO);
     }
