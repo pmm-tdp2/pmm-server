@@ -17,7 +17,12 @@ app.put("/travel/", function (req, res) {
 app.post("/travel/cotization", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
 
-    res.status(200).send({price:500, travelID:"travel001"});
+    driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
+    var aTravel = travelService.findTravel(driverSearchDTO);
+    var aTravelDTO = new travelDTOModel.TravelDTO();
+    aTravelDTO.travelID = aTravel.travelID;
+    aTravelDTO.price = Math.trunc(aTravel.price);
+    res.status(200).send(aTravelDTO);
 
     /*var driverSearchDTO = new partyDTOModel.DriverSearchDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
