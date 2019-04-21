@@ -1,6 +1,6 @@
 var baseModel = require('../model/base') 
 
-var states = null;
+var statesDB = null;
 
 module.exports = {
     GeographicCoordenate : class GeographicCoordenate {
@@ -20,8 +20,8 @@ module.exports = {
     },
     
     State : class State extends baseModel.Base {
-        constructor() {
-            super();
+        constructor(id, description) {
+            super(id, description);
         }
     },
     
@@ -44,17 +44,18 @@ module.exports = {
     },
     
     getAllStates : function getAllStates() {
-        if (states == null) {
-            states = new Map();
-            var cotizated = new  this.State(1, "cotizated");
+        console.info("Travel :" + " getAllStates");
+        if (statesDB == null) {
+            statesDB = new Map();
+            var cotizated = new this.State(1, "cotizated");
             var userConfirmated = new this.State(2, "user confirmated");
             var driverConfirmated = new this.State(3, "driver confirmated");
             var finalized = new this.State(4, "finalized");
-            states.set(1, cotizated);
-            states.set(2, userConfirmated);
-            states.set(3, driverConfirmated);
-            states.set(4, finalized);
+            statesDB.set(1, cotizated);
+            statesDB.set(2, userConfirmated);
+            statesDB.set(3, driverConfirmated);
+            statesDB.set(4, finalized);
         }
-        return states;
+        return statesDB;
     }
 }

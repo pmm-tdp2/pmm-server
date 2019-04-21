@@ -1,7 +1,7 @@
 
 exports.Base = class Base {
-    constructor() {
-        this.id;
-        this.description;
+    constructor(id, description) {
+        this.id = id;
+        this.description = description;
     }
 }

@@ -51,7 +51,7 @@ module.exports = {
     },
     
     findTravelByTravelID : function findTravelByTravelID(travelID) {
-        console.info("travelServiceMock: findTravelByTravelID");
+        console.info("travelServiceMock :" + "findTravelByTravelID. travelID : " + travelID);
         var aTravel = null;
         if (travels.has(travelID)) {
             aTravel = travels.get(travelID);
@@ -61,6 +61,7 @@ module.exports = {
     
     confirmTravel : function confirmTravel(travelID) {
         // logica de mandar el emit al chofer
+        console.info("travelServiceMock :" + "confirmTravel. travelID : " + travelID);
         var aTravel = this.findTravelByTravelID(travelID)
         var driverConfirmatedStatus = travelModel.getAllStates().get(3);
         aTravel.states.push(driverConfirmatedStatus);

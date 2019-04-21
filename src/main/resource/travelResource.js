@@ -92,11 +92,19 @@ app.post("/travel/confirmation", function (req, res) {
         }        
     } 
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
-        var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
-        var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
-        aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
-        aTravelConfirmationResponseDTO.time = aTravel.time;
-        res.status(200).send(aTravelConfirmationResponseDTO);
+        try {
+            /*
+            * Precondition: Call travel/cotization
+            */
+            var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
+            var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
+            aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
+            aTravelConfirmationResponseDTO.time = aTravel.time;
+            res.status(200).send(aTravelConfirmationResponseDTO);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+        
     }
 })
   
