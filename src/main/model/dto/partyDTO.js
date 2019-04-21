@@ -3,8 +3,8 @@ var travelModel = require('../../model/travel');
 exports.DriverSearchDTO = class DriverSearchDTO {
     constructor(arg) {
         if (arg instanceof Map) {
-            if (arg.has('userId')) {
-                this.userId = arg.get('userId');
+            if (arg.has('userID')) {
+                this.userID = arg.get('userID');
             }
             if (arg.has('from')) {
                 this.from = new geograficCoordenate.GeographicCoordenate(arg.get('from'));
@@ -13,25 +13,25 @@ exports.DriverSearchDTO = class DriverSearchDTO {
                 this.to = new geograficCoordenate.GeographicCoordenate(arg.get('to'));
             }
             if (arg.has('petSmallAmount')) {
-                this.petSmallAmount = new geograficCoordenate.GeographicCoordenate(arg.get('petSmallAmount'));
+                this.petSmallAmount = arg.get('petSmallAmount');
             }
             if (arg.has('petMediumAmount')) {
-                this.petMediumAmount = new geograficCoordenate.GeographicCoordenate(arg.get('petMediumAmount'));
+                this.petMediumAmount = arg.get('petMediumAmount');
             }
             if (arg.has('petLargeAmount')) {
-                this.petLargeAmount = new geograficCoordenate.GeographicCoordenate(arg.get('petLargeAmount'));
+                this.petLargeAmount = arg.get('petLargeAmount');
             }
             if (arg.has('hasACompanion')) {
-                this.hasACompanion = new geograficCoordenate.GeographicCoordenate(arg.get('hasACompanion'));
+                this.hasACompanion = arg.get('hasACompanion');
             }
         } else {
-            this.userId = arg.userId;
+            this.userID = arg.userID;
             this.from = new travelModel.GeographicCoordenate(arg.from);
             this.to = new travelModel.GeographicCoordenate(arg.to);
-            this.petSmallAmount = new travelModel.GeographicCoordenate(arg.petSmallAmount);
-            this.petMediumAmount = new travelModel.GeographicCoordenate(arg.petMediumAmount);
-            this.petLargeAmount = new travelModel.GeographicCoordenate(arg.petLargeAmount);
-            this.hasACompanion = new travelModel.GeographicCoordenate(arg.hasACompanion);
+            this.petSmallAmount = arg.petSmallAmount;
+            this.petMediumAmount = arg.petMediumAmount;
+            this.petLargeAmount = arg.petLargeAmount;
+            this.hasACompanion = arg.hasACompanion;
         }
     }
 }
@@ -44,13 +44,14 @@ class PartyDTO {
     }
 }
 
-exports.DriverDTO = class Driver extends Party {
+exports.DriverDTO = class DriverDTO extends PartyDTO {
     constructor() {
+        super();
         this.license;
     }
 }
 
-exports.UserDTO = class User extends Party {
+exports.UserDTO = class UserDTO extends PartyDTO {
     constructor() {
         super();
     }
