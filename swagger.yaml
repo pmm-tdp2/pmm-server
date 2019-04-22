@@ -139,6 +139,36 @@ paths:
           description: Definition generated from Swagger Inspector
           schema:
             $ref: '#/definitions/ScoreDTO'
+  /travel/finalize:
+    post:
+      tags:
+        - Travel
+      consumes:
+        - application/json
+      produces:
+        - text/html
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/TravelFinalizeRequestDTO'
+          x-examples:
+            application/json: |-
+              {
+                "travelID" : 1,
+                "rol" : "DRIVER",
+                "id" : 1
+              }
+      responses:
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
   /score:
     post:
       tags:
@@ -274,6 +304,14 @@ definitions:
         $ref: '#/definitions/DriverDTO'
       time:
         type: string
+  TravelFinalizeRequestDTO:
+    properties:
+      travelID:
+        type: integer
+      rol:
+        type: string
+      id:
+        type: integer
   TravelStatus:
     properties:
       id:
