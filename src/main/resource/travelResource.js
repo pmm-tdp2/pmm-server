@@ -37,7 +37,7 @@ app.post("/travel/cotization", function (req, res) {
         var aTravel = travelService.createATravel(driverSearchDTO);
         var aTravelCotizationDTO = new travelDTOModel.TravelCotizationDTO();
         aTravelCotizationDTO.travelID = aTravel.travelID;
-        aTravelCotizationDTO.price = aTravel.price;
+        aTravelCotizationDTO.price = Math.round(aTravel.price *100) / 100;
         res.status(200).send(aTravelCotizationDTO);
     } catch (error) {
         console.error(error);
@@ -81,7 +81,7 @@ app.post("/travel/confirmation", function (req, res) {
             var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
             aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
             aTravelConfirmationResponseDTO.driver = travelService.findDriver(aConnectionDriver.id);
-            aTravelConfirmationResponseDTO.time = aTravel.time;
+            aTravelConfirmationResponseDTO.time = Math.round(aTravel.time *100) / 100;
     
             res.status(200).send(aTravelConfirmationResponseDTO);
         }        
