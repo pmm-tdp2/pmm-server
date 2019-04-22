@@ -73,8 +73,10 @@ module.exports = {
     finalizeTravel : function finalizeTravel(travelID) {
         console.info("travelServiceMock :" + "finalizeTravel. travelID : " + travelID);
         var aTravel = this.findTravelByTravelID(travelID)
-        var finalizeStatus = travelModel.getAllStates().get(4);
-        aTravel.states.push(finalizeStatus);
+        if (aTravel != null) {
+            var finalizeStatus = travelModel.getAllStates().get(4);
+            aTravel.states.push(finalizeStatus);
+        }
         return aTravel;
     }
 }
