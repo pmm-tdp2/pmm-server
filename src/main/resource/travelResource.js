@@ -9,7 +9,6 @@ var partyDTOModel = require("../model/dto/partyDTO"),
     travelDTOModel = require('../model/dto/travelDTO');
 
 app.use(parser.json());
-
 app.get("/travel/:id", function(req, res) {
     console.info("TravelResource :" + req.url+ ". Param : " + req.params.id);
     try {
@@ -41,6 +40,7 @@ app.post("/travel/cotization", function (req, res) {
         aTravelCotizationDTO.price = aTravel.price;
         res.status(200).send(aTravelCotizationDTO);
     } catch (error) {
+        console.error(error);
         res.status(500).send(error);
     }
 });
@@ -85,7 +85,8 @@ app.post("/travel/confirmation", function (req, res) {
     
             res.status(200).send(aTravelConfirmationResponseDTO);
         }        
-    } 
+    }
+    var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
         try {
             if (connectionUsers != undefined) {
@@ -118,5 +119,34 @@ app.post("/travel/confirmation", function (req, res) {
         }
     }
 });
-  
+
+app.post("/travel/finalize", function (req, res) {
+    console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
+    var aTravelFinalizeRequestDTO = new travelDTOModel.TravelFinalizeRequesDTO(req.body);
+    var connectionUsers = allSockets.connectionUsers;
+    var connectionDrives = allSockets.connectionDrivers;
+    var aConnectionUser = null;
+    try {
+        try {
+            if (connectionUsers != undefined) {
+                aConnectionUser = connectionUsers.values().next().value; 
+            }
+        } catch (err) {
+            console.error(err);
+        }
+        if (aConnectionUser == null || aConnectionUser == undefined) {
+            console.error("There are no Users");
+            res.status(204).send({status:204, message:"There are not Users"});
+        } else {
+            console.info("Available User");
+            var aTravel = travelService.finalizeTravel(aTravelFinalizeRequestDTO.travelID);
+            aConnectionUser.socket.emit("NOTIFICATION_FINALIZED_OF_TRAVEL", {message:"Finalized ok"});
+            res.status(200).send({status:200, message:"Finalized ok"});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 module.exports = app;

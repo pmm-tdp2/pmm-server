@@ -44,6 +44,8 @@ module.exports = {
         aTravel.distance = haversine(driverSearchDTO.from, driverSearchDTO.to);
         aTravel.time = aTravel.distance / process.env.TIME_PER_KM;
         aTravel.price = aTravel.distance * process.env.PRICE_PER_KM;
+        var cotizatedStatus = travelModel.getAllStates().get(1);
+        aTravel.states.push(cotizatedStatus);
         if (!travels.has(travelID)) {
             travels.set(travelID, aTravel);
         }
@@ -65,6 +67,14 @@ module.exports = {
         var aTravel = this.findTravelByTravelID(travelID)
         var driverConfirmatedStatus = travelModel.getAllStates().get(3);
         aTravel.states.push(driverConfirmatedStatus);
+        return aTravel;
+    },
+
+    finalizeTravel : function finalizeTravel(travelID) {
+        console.info("travelServiceMock :" + "finalizeTravel. travelID : " + travelID);
+        var aTravel = this.findTravelByTravelID(travelID)
+        var finalizeStatus = travelModel.getAllStates().get(4);
+        aTravel.states.push(finalizeStatus);
         return aTravel;
     }
 }
