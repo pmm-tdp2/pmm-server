@@ -106,6 +106,7 @@ app.post("/travel/confirmation", function (req, res) {
                 var aTravel = travelService.confirmTravel(aTravelConfirmationRequestDTO.travelID);
                 aTravel.driverID = aTravelConfirmationRequestDTO.id;
                 var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
+                aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
                 aTravelConfirmationResponseDTO.time = aTravel.time;
                 aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.driverID)
                 aConnectionUser.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelConfirmationResponseDTO);
