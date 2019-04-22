@@ -81,7 +81,7 @@ app.post("/travel/confirmation", function (req, res) {
             var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
             aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
             aTravelConfirmationResponseDTO.driver = travelService.findDriver(aConnectionDriver.id);
-            aTravelConfirmationResponseDTO.time = Math.round(aTravel.time *100) / 100;
+            aTravelConfirmationResponseDTO.time = Math.round(aTravel.time);
     
             res.status(200).send(aTravelConfirmationResponseDTO);
         }        
@@ -107,7 +107,7 @@ app.post("/travel/confirmation", function (req, res) {
                 aTravel.driverID = aTravelConfirmationRequestDTO.id;
                 var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
                 aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
-                aTravelConfirmationResponseDTO.time = aTravel.time;
+                aTravelConfirmationResponseDTO.time = Math.round(aTravel.time);
                 aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.driverID)
                 aConnectionUser.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelConfirmationResponseDTO);
 
