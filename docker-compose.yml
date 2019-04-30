@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  pmm:
+    image: dockerhernan/pmm-sever:latest
+    ports:
+      - 3000:8081
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+        POSTGRES_USER: pmm
+        POSTGRES_PASSWORD: pmm.0
+        POSTGRES_DB: pmm
+    volumes:
+      - ./src/main/db/initModel.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
