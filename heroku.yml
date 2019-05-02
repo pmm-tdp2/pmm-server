@@ -2,4 +2,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: node src/main/main.js
+  web: node -p 3000:8081 src/main/main.js
