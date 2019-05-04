@@ -19,10 +19,18 @@ docker build -t pmm-server .
 docker run -p 3000:8081 pmm-server
 
 ### postgres
-docker run --name pmm -e POSTGRES_PASSWORD=pmm.0 -d postgres
+docker run --name pmm -e POSTGRES_PASSWORD=password -d pmm
 
-docker exec -it pmm psql -U postgres
+docker exec -it pmm psql -U pmm
 
+  - setup db :
+  ```sh
+    setup.sql
+  ```
+- init db :
+  ```sh
+    initModel.sql
+  ```
 ## Docker Compose
 - install and configure docker compose
   ```sh

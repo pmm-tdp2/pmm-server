@@ -4,6 +4,7 @@ const express = require("express");
 const PORT = 3000;
 require('custom-env').env('pmm');
 var partyResource = require("./resource/partyResource"),
+    userStatusResource = require("./resource/userStatusResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource"),
     traceResource = require("./resource/traceResource"),
@@ -26,6 +27,7 @@ app.get("/home", (req, res) => {
 app.use(bodyParser.json())
 // Routing to other responsable to handle request
 app.use("/pmm", partyResource);
+app.use("/pmm", userStatusResource);
 app.use("/pmm", travelResource);
 app.use("/pmm", scoreResource);
 app.use("/pmm", traceResource);

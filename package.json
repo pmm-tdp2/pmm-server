@@ -15,7 +15,8 @@
     "socket.io": "^2.2.0",
     "console-info": "0.0.5",
     "console-error": "0.0.4",
-    "haversine": "1.1.1"
+    "haversine": "1.1.1",
+    "pg": "7.10.0"
   },
   "devDependencies": {},
   "scripts": {

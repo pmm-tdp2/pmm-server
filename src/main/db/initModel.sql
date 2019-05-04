@@ -13,4 +13,5 @@ CREATE TABLE pmm.USER_CREDENTIALS (
     USER_STATUS_ID INTEGER REFERENCES USER_STATUS (ID)
 );
 
+INSERT INTO pmm.USER_SATUS (DESCRIPTION) VALUES ('created', 'available', 'disavailable', 'removed');
 
