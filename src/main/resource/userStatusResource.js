@@ -9,7 +9,7 @@ app.get("/userStatus", function(req, res) {
     console.info("userStatusResource :" + req.url);
     try {
         userStatusService.findAllUserStatus()
-        .then(function(result) {res.status(204).send(result)})
+        .then(function(result) {res.status(200).send(result)})
         .catch(function(err) {res.status(500).send(err)});
     } catch (error) {
         console.error(error);

@@ -9,17 +9,17 @@ const client = new Client({
 
 client.connect( () => console.info('userStatusRepository: Connected successfuly'));
 
-exports.searchAllUserStatus = function searchAllUserStatus() {
+exports.searchAllUserStatus = async function searchAllUserStatus() {
     console.info('userStatusRepository: searchAllUserStatus');
     return new Promise(function (resolve, reject) {
         client.query('SELECT * FROM USER_STATUS;', function (err, result) {
             if (err) {
-                return resolve(err);
+                reject(err);
             }
             else {
                 console.info(result.rows);
                 data = result.rows;
-                return resolve(data);
+                resolve(data);
             }
         });
     });
