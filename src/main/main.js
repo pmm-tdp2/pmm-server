@@ -12,7 +12,7 @@ var partyResource = require("./resource/partyResource"),
     bodyParser = require("body-parser");
     global = require("./util/util")
 const app = express();
-
+const { Client } = require('pg');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
@@ -86,6 +86,13 @@ io.on('connection', (socket) => {
 
 });
 
+// configure db
+const clientDB = new Client({
+    connectionString: process.env.DATABASE_URL_LOCAL,
+    ssl: true,
+});
+clientDB.connect( () => console.info('main: Connected successfuly'));
+exports.clientDB = clientDB;
 
 process.on('uncaughtException', (err) => {
     console.error("========Uncaught exception========");

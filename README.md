@@ -52,7 +52,7 @@ docker exec -it pmm psql -U pmm
 - Postgres DB configure:
  ```
   * POSTGRES_USER: pmm
-  * POSTGRES_PASSWORD: pmm.0
+  * POSTGRES_PASSWORD: password
   * POSTGRES_DB: pmm
   * Run at port 5432
  ```
