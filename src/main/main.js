@@ -93,8 +93,9 @@ const clientDB = new Client({
     connectionString: process.env.DATABASE_URL_LOCAL,
     ssl: true,
 });
-clientDB.connect( () => console.info('main: Connected successfuly'));
+clientDB.connect( () => console.info('main: Connected successfuly into ' + process.env.DATABASE_URL_LOCAL));
 exports.clientDB = clientDB;
+
 
 process.on('uncaughtException', (err) => {
     console.error("========Uncaught exception========");
