@@ -56,3 +56,28 @@ exports.UserDTO = class UserDTO extends PartyDTO {
         super();
     }
 }
+
+exports.UserCredentialsRequestDTO = class UserCredentialsRequestDTO {
+    constructor(arg) {
+        if (arg instanceof Map) {
+            if (arg.has('id')) {
+                this.id = arg.get('id');
+            }
+            if (arg.has('rol')) {
+                this.rol = arg.get('rol');
+            }
+            if (arg.has('firstName')) {
+                this.firstName = arg.get('firstName');
+            }
+            if (arg.has('lastName')) {
+                this.lastName = arg.get('lastName');
+            }
+        } else {
+            this.id = arg.id;
+            this.rol = arg.rol;
+            this.firstName = arg.firstName;
+            this.lastName = arg.lastName;
+        }
+
+    }
+}
