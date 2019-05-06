@@ -1,7 +1,7 @@
 require("custom-env").env("pmm");
 var Sequelize = require("sequelize");
 var pg = require("pg");
-
+/*
 var seq = new Sequelize(process.env.DATABASE_URL_LOCAL, {
   define: {
     timestamps: true,
@@ -29,3 +29,4 @@ pg.types.setTypeParser(1114, function(stringValue) {
 });
 
 module.exports = seq;
+*/

@@ -4,7 +4,7 @@ var express = require("express"),
     app = express(),
     userStatusService = require("../service/userStatusService"),
     parser = require("body-parser");
-/*
+    
 app.get("/userStatus", function(req, res) {
     console.info("userStatusResource :" + req.url);
     try {
@@ -16,7 +16,8 @@ app.get("/userStatus", function(req, res) {
         res.status(500).send(error);
     }
 });
-*/
+
+/*
 app.get("/userStatus", function(req, res) {
     console.info("userStatusResource :" + req.url);
     try {
@@ -32,5 +33,5 @@ app.get("/userStatus", function(req, res) {
         res.status(500).send(error);
     }
 });
-
+*/
 module.exports = app;

@@ -7,7 +7,7 @@ var express = require("express"),
   parser = require("body-parser");
 
 app.post("/userCredentials/login", function(req, res) {
-  console.info("userCredentialsResource :" + req.url);
+  console.info("userCredentialsResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
   try {
     userCredentialsService
       .login(req.body.id)
@@ -15,11 +15,11 @@ app.post("/userCredentials/login", function(req, res) {
         if (result != null && result.length == 1) {
           res
             .status(200)
-            .send(JSON.stringify({ code: 200, message: "login successfuly" }));
+            .send(JSON.stringify({ status: 200, message: "login successfuly" }));
         } else {
           res
             .status(203)
-            .send(JSON.stringify({ code: 203, message: "user not exists" }));
+            .send(JSON.stringify({ status: 203, message: "user not exists" }));
         }
       })
       .catch(function(err) {
@@ -44,26 +44,26 @@ app.post("/userCredentials/register", function(req, res) {
           res
             .status(200)
             .send(
-              JSON.stringify({ code: 200, message: "register successfuly" })
+              JSON.stringify({ status: 200, message: "register successfuly" })
             );
         } else {
           res
             .status(203)
             .send(
-              JSON.stringify({ code: 203, message: "preconditions error" })
+              JSON.stringify({ status: 203, message: "preconditions error" })
             );
         }
       })
       .catch(function(err) {
         res
           .status(500)
-          .send(JSON.stringify({ code: 500, message: "unexpected error" }));
+          .send(JSON.stringify({ status: 500, message: "unexpected error" }));
       });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .send(JSON.stringify({ code: 500, message: "unexpected error" }));
+      .send(JSON.stringify({ status: 500, message: "unexpected error" }));
   }
 });
 

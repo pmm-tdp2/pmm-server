@@ -1,6 +1,7 @@
 var Sequelize = require("sequelize"),
   sequelizeDomain = require("../domain/sequelize");
 
+/*
 var UserStatus = sequelizeDomain.define("USER_STATUS", {
   userStatusID: {
     type: Sequelize.INTEGER,
@@ -18,3 +19,4 @@ var UserStatus = sequelizeDomain.define("USER_STATUS", {
 });
 
 module.exports = UserStatus;
+*/
