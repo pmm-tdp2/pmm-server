@@ -1,19 +1,40 @@
 version: '2'
-
 services:
   pmm:
-    image: dockerhernan/pmm-sever:latest
+    depends_on:
+      - postgres
+    build: ./
     ports:
-      - 3000:8081
+      - "8081:8081"
+    container_name: server_container
+    environment:
+      - PGPASSWORD=password
+      - PGUSER=pmm
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PORT=8081
+      - DATABASE_URL=postgres://pmm:password@postgres:5432/pmm
+    restart: always
+    links:
+      - postgres
+    volumes:
+      - './src/main/:/app/src/main'
+      - './src/main/resource:/app/src/main/resource'
+      - './src/main/service:/app/src/main/service'
+      - './src/main/repository:/src/main/app/repository'
+      - './src/main/model:/app/src/main/model'
+      - './src/main/model/dto:/src/app/main/model/dto'
+      - './src/main/util/dto:/src/app/main/util'
 
   postgres:
     image: postgres
     restart: always
+    container_name: postgres_container
     environment:
         POSTGRES_USER: pmm
         POSTGRES_PASSWORD: password
         POSTGRES_DB: pmm
     volumes:
-      - ./src/main/db/initModel.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/db/initModel.sql:/docker-entrypoint-initdb.d/initModel.sql
     ports:
-      - 5432:5432
+      - 5400:5432

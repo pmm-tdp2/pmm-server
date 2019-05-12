@@ -9,14 +9,18 @@ var express = require("express"),
 app.post("/userCredentials/login", function(req, res) {
   console.info("userCredentialsResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
   try {
+
+    console.info(req.body);
     userCredentialsService
       .login(req.body.id)
       .then(function(result) {
         if (result != null && result.length == 1) {
+          console.info("login successfuly");
           res
             .status(200)
             .send(JSON.stringify({ status: 200, message: "login successfuly" }));
         } else {
+          console.info("login error");
           res
             .status(203)
             .send(JSON.stringify({ status: 203, message: "user not exists" }));

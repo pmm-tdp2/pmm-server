@@ -4,18 +4,22 @@ var db = require("../main"),
   UserStatus = require("../model/userStatus");
 
 exports.searchAllUserStatus = async function searchAllUserStatus() {
-  console.info("userStatusRepository: searchAllUserStatus");
-  return new Promise(function(resolve, reject) {
-    db.clientDB.query("SELECT * FROM USER_STATUS;", function(err, result) {
-      if (err) {
-        reject(err);
-      } else {
-        console.info(result.rows);
-        data = result.rows;
-        resolve(data);
-      }
+    console.info('userStatusRepository: searchAllUserStatus');
+    console.log('WTF');
+    return new Promise(function (resolve, reject) {
+        db.clientDB.query('SELECT * FROM USER_STATUS', function (err, result) {
+            if (err) {
+                console.log("ERROR");
+                reject(err);
+            }
+            else {
+                console.log("Response");
+                console.info(result.rows);
+                data = result.rows;
+                resolve(data);
+            }
+        });
     });
-  });
 };
 
 exports.findAll = async function findAll() {

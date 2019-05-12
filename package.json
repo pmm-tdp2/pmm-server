@@ -2,7 +2,7 @@
   "name": "pmm-server",
   "version": "1.0.0",
   "description": "Server para la plataforma de movilidad de mascotas.",
-  "main": "index.js",
+  "main": "src/main/main.js",
   "dependencies": {
     "body-parser": "1.18.3",
     "config": "^3.0.1",
@@ -21,8 +21,9 @@
   },
   "devDependencies": {},
   "scripts": {
+    "prestart": "nodemon -L app/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon  src/main/main.js"
+    "start": "node  src/main/main.js"
   },
   "repository": {
     "type": "git",

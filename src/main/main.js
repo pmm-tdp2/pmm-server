@@ -1,5 +1,6 @@
 require('console-info');
 require('console-error');
+const pg = require('pg');
 const express = require("express");
 const PORT = 3000;
 require('custom-env').env('pmm');
@@ -89,11 +90,26 @@ io.on('connection', (socket) => {
 });
 
 // configure db
-const clientDB = new Client({
-    connectionString: process.env.DATABASE_URL_LOCAL,
+/*const clientDB = new Client({
+    connectionString: "postgres://pmm:password@localhost:5400",
     ssl: true,
 });
 clientDB.connect( () => console.info('main: Connected successfuly into ' + process.env.DATABASE_URL_LOCAL));
+});*/
+
+
+const clientDB = new pg.Client(process.env.DATABASE_URL);
+
+clientDB.connect((err) => {
+    if (err) {
+        console.log("error in conecction");
+    }else{
+        console.log(" main: Connected successfuly");
+    }
+})
+
+console.log(process.env.DATABASE_URL);
+console.log("###########################");
 exports.clientDB = clientDB;
 
 
