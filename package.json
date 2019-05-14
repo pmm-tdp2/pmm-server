@@ -1,38 +1,38 @@
 {
-  "name": "pmm-server",
-  "version": "1.0.0",
-  "description": "Server para la plataforma de movilidad de mascotas.",
-  "main": "src/main/main.js",
-  "dependencies": {
-    "body-parser": "1.18.3",
-    "config": "^3.0.1",
-    "console-error": "0.0.4",
-    "console-info": "0.0.5",
-    "custom-env": "1.0.0",
-    "express": "^4.16.4",
-    "express-swagger-generator": "1.1.13",
-    "haversine": "1.1.1",
-    "nodemon": "1.18.10",
-    "pg": "7.10.0",
-    "sequelize": "5.8.5",
-    "socket.io": "^2.2.0",
-    "swagger-ui-express": "4.0.2",
-    "yamljs": "0.3.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "prestart": "nodemon -L app/bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node  src/main/main.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tdp2-7547/pmm-server.git"
-  },
-  "author": "hernan",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tdp2-7547/pmm-server/issues"
-  },
-  "homepage": "https://github.com/tdp2-7547/pmm-server#readme"
+    "name": "pmm-server",
+    "version": "1.0.0",
+    "description": "Server para la plataforma de movilidad de mascotas.",
+    "main": "src/main/main.js",
+    "dependencies": {
+        "body-parser": "1.18.3",
+        "config": "^3.0.1",
+        "console-error": "0.0.4",
+        "console-info": "0.0.5",
+        "custom-env": "1.0.0",
+        "express": "^4.16.4",
+        "express-swagger-generator": "1.1.13",
+        "haversine": "1.1.1",
+        "nodemon": "1.18.10",
+        "pg": "7.10.0",
+        "sequelize": "5.8.5",
+        "socket.io": "^2.2.0",
+        "swagger-ui-express": "4.0.2",
+        "yamljs": "0.3.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "prestart": "nodemon -L app/bin/www",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node  src/main/main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tdp2-7547/pmm-server.git"
+    },
+    "author": "hernan",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tdp2-7547/pmm-server/issues"
+    },
+    "homepage": "https://github.com/tdp2-7547/pmm-server#readme"
 }

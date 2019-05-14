@@ -31,6 +31,14 @@ docker exec -it pmm psql -U pmm
   ```sh
     initModel.sql
   ```
+- Start the postgresSQL server 
+```
+  sudo service postgresql start
+```
+- Stop the postgresSQL server 
+```
+  sudo service postgresql stop
+```
 ## Docker Compose
 - install and configure docker compose
   ```sh
@@ -48,11 +56,17 @@ docker exec -it pmm psql -U pmm
   ```sh
     docker-compose down
   ```
-- Server running at port 3000
+- Server running at port 8081
 - Postgres DB configure:
  ```
   * POSTGRES_USER: pmm
   * POSTGRES_PASSWORD: password
   * POSTGRES_DB: pmm
-  * Run at port 5432
+  * Run at port 5400
  ```
+ ## Docker Compose: utils commad
+ - Alias
+  ```sh
+    alias dk="docker"
+    alias dc="docker-compose"
+  ```

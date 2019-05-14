@@ -1,8 +1,9 @@
-version: '2'
+version: '2.1'
 services:
   pmm:
     depends_on:
-      - postgres
+      postgres: 
+        condition: service_healthy
     build: ./
     ports:
       - "8081:8081"
@@ -25,10 +26,11 @@ services:
       - './src/main/model:/app/src/main/model'
       - './src/main/model/dto:/src/app/main/model/dto'
       - './src/main/util/dto:/src/app/main/util'
-
   postgres:
     image: postgres
     restart: always
+    healthcheck:
+      test: "exit 0"
     container_name: postgres_container
     environment:
         POSTGRES_USER: pmm
