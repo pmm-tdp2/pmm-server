@@ -52,6 +52,33 @@ paths:
               schema:
                 type: string
               examples: {}
+  /userCredentials/login:
+    post:
+      tags:
+        - Party
+      description: Login User and Driver
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            application/json: |-
+              {
+                "id" : "12345678"
+              }
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
   /travel/{id}:
     get:
       tags:
