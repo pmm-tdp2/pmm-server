@@ -37,38 +37,8 @@ app.post("/userCredentials/login", function(req, res) {
 
 app.post("/userCredentials/register", function(req, res) {
   console.info("userCredentialsResource :" + req.url);
-  try {
-    var userCredentialsRequestDTO = new partyDTOModel.UserCredentialsRequestDTO(
-      req.body
-    );
-    userCredentialsService
-      .register(userCredentialsRequestDTO)
-      .then(function(result) {
-        if (result != null && result.length == 1) {
-          res
-            .status(200)
-            .send(
-              JSON.stringify({ status: 200, message: "register successfuly" })
-            );
-        } else {
-          res
-            .status(203)
-            .send(
-              JSON.stringify({ status: 203, message: "preconditions error" })
-            );
-        }
-      })
-      .catch(function(err) {
-        res
-          .status(500)
-          .send(JSON.stringify({ status: 500, message: "unexpected error" }));
-      });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send(JSON.stringify({ status: 500, message: "unexpected error" }));
-  }
+  console.debug("data recieved from mobile: "+ JSON.stringify(req.body));
+  res.status(200).send({status:200, message:"register successfully"});
 });
 
 module.exports = app;
