@@ -19,6 +19,7 @@ services:
     links:
       - postgres
     volumes:
+      - './swagger.yaml:/app/swagger.yaml'
       - './src/main/:/app/src/main'
       - './src/main/resource:/app/src/main/resource'
       - './src/main/service:/app/src/main/service'
