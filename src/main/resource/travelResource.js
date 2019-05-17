@@ -45,6 +45,41 @@ app.post("/travel/cotization", function (req, res) {
     }
 });
 
+
+app.post("/travel/cancel", function (req, res) {
+
+
+    //TODO: edit DB travel
+    
+    //TODO: add score the driver with 0
+
+    //find the user associated to travel
+    var connectionUsers = allSockets.connectionUsers;
+    var aConnectionUser;
+    try {
+        if (connectionUsers != undefined) {
+            aConnectionUser = connectionUsers.values().next().value; 
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    //notify to user
+
+    if (aConnectionUser == null || aConnectionUser == undefined) {
+        console.error("There are no Users");
+        res.status(204).send({status:204, message:"There are not Users"});
+    } else {
+        try {
+            aConnectionUser.socket.emit("CANCEL_OF_TRAVEL", "soy un harcodeo");
+            res.status(200).send({status:200, messsage:"cancelation received successfully"});
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    }
+});
+
+
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
