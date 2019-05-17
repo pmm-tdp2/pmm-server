@@ -49,12 +49,14 @@ app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
+    var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionDriver = null;
     if (aTravelConfirmationRequestDTO.rol == "USER") {
         try {
-            if (connectionDrives != undefined) {
-                aConnectionDriver = connectionDrives.values().next().value; 
+            if (connectionDrivers != undefined) {
+                //aConnectionDriver = connectionDrivers.values().next().value;
+                var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
+                aConnectionDriver = travelService.findBetterDriver(aTravel);
             }
         } catch (err) {
             console.error(err);
@@ -88,6 +90,25 @@ app.post("/travel/confirmation", function (req, res) {
     }
     var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
+
+        //evaluate if user is connected
+
+        //find drivers
+
+        //notify to driver
+        /**
+         * TODO: se dede establecer un tiempo maximo para la respuesta
+         * 
+         */
+
+
+
+
+
+
+
+
+        
         try {
             if (connectionUsers != undefined) {
                 aConnectionUser = connectionUsers.values().next().value; 
@@ -125,7 +146,7 @@ app.post("/travel/finalize", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelFinalizeRequestDTO = new travelDTOModel.TravelFinalizeRequesDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
+    var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionUser = null;
     try {
         try {

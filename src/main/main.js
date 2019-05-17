@@ -47,6 +47,7 @@ io.set('transports', ['websocket']);
 var connectionUsers = new Map();
 var connectionDrivers = new Map();
 var connectionDelete = new Map();
+var positionDrivers = new Map();
 var userID = 0;
 var driverID = 0;
 
@@ -64,6 +65,9 @@ io.on('connection', (socket) => {
             var connection = new connectionModel.ConnectionInfo(driverID, rol, socket);
             connectionDrivers.set(socket.id, connection);
             exports.connectionDrivers = connectionDrivers;
+
+            //adding driver to save his position for algorithm find driver for travel
+            exports.positionDrivers = positionDrivers.set(driverID,null);
         }
         socket.emit("ROL_RESPONSE", connection.id);
     });
@@ -79,6 +83,10 @@ io.on('connection', (socket) => {
             var aConnection = connectionDrivers.get(socket.id);
             console.info("Driver id " + aConnection.id + " has left : " + socket.id);
             connectionDrivers.delete(socket.id);
+
+            //delete driver for algorithm find driver for travel
+            var connection = connectionDrivers.get(socket.id);
+            positionDrivers.delete(connection.driverID);
         }
         socket.disconnect(true);
     });

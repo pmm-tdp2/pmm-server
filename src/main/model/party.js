@@ -7,9 +7,8 @@ class Party {
 }
 
 exports.Driver = class Driver extends Party {
-    constructor(firstName, lastName, license) {
+    constructor(firstName, lastName) {
         super(firstName, lastName);
-        this.license = license;
     }
 }
 

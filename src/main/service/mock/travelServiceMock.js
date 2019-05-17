@@ -78,5 +78,35 @@ module.exports = {
             aTravel.states.push(finalizeStatus);
         }
         return aTravel;
+    },
+
+    findDriversToTravel : function findDriversToTravel(travelID, searchRadius) {
+        console.info("travelServiceMock: "+ "findDriversToTravel. travelID: "+ travelID);
+        var possibleDrivers = new Array();
+
+        //find optimum driver for user
+        // is a map that contain (key,value) -> (travelID, GeographicCoordinate)
+        var positionsDrivers = allSockets.positionsDrivers;
+
+        var aTravel = travelService.findTravelById(aTravelConfirmationRequestDTO.travelID);
+        var possibleDrivers = new Array();
+        var aDriverMinimumPriority = null;
+        positionsDrivers.forEach( (value, key, positionsDrivers) => {
+            distance = haversine(value, aTravel.from);
+            if(distance < searchRadius){
+                var aDriver = findDriver(key);
+                possibleDrivers.push(aDriver);
+            }
+        });
+
+        //ordering drivers in descending order
+        possibleDrivers.sort( function (a,b){
+            return b.priority - c.priority;
+        });
+
+        //return only 3 drivers
+        return possibleDrivers.length < 3 ? possibleDrivers :
+        positionsDrivers.slice(0,2)
     }
+
 }
