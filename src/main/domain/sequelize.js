@@ -1,32 +1,16 @@
-require("custom-env").env("pmm");
+"use strict";
+
 var Sequelize = require("sequelize");
-var pg = require("pg");
-/*
-var seq = new Sequelize(process.env.DATABASE_URL_LOCAL, {
-  define: {
-    timestamps: true,
-    createdAt: 'date_created', // overriding field name
-    updatedAt: 'last_updated' // overriding field name
-  }
+
+const sequelize = new Sequelize("postgres://pmm:password@localhost:5432/pmm", {
+    dialect: "postgres",
+    protocol: "postgres",
+    ssl: true
 });
 
-seq
-  .authenticate()
-  .then(function(data) {
-    console.log(
-      "Database connection SUCCESS [ " + process.env.DATABASE_URL_LOCAL + " ].\n"
-    );
-  })
-  .catch(function(err) {
-    console.error(
-      "Unable to connect to the database: " + process.env.DATABASE_URL_LOCAL,
-      err
-    );
-  });
+const models = {};
 
-pg.types.setTypeParser(1114, function(stringValue) {
-  return new Date(stringValue + "+0300"); // ARG timezone
-});
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
 
-module.exports = seq;
-*/
+module.exports = models;

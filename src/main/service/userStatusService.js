@@ -11,3 +11,8 @@ exports.findAll = function findAll() {
     console.info("userStatusService : findAll");
     return repository.findAll();
 }
+
+exports.create = function create(userStatus) {
+    console.info("userStatusService : create");
+    return repository.create(userStatus);
+}

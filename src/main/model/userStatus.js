@@ -1,22 +1,15 @@
-var Sequelize = require("sequelize"),
-  sequelizeDomain = require("../domain/sequelize");
-
-/*
-var UserStatus = sequelizeDomain.define("USER_STATUS", {
-  userStatusID: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    notEmpty: true,
-    primaryKey: true,
-    field: "USER_STATUS_ID"
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: true,
-    defaultValue: null,
-    field: "DESCRIPTION"
-  }
-});
-
-module.exports = UserStatus;
-*/
+exports.UserStatus = class UserStatus {
+    constructor(arg) {
+        if (arg instanceof Map) {
+            if (arg.has('userStatusID')) {
+                this.userStatusID = arg.get('userStatusID');
+            }
+            if (arg.has('description')) {
+                this.description = arg.get('description');
+            }
+        } else {
+            this.userStatusID = arg.userStatusID;
+            this.description = arg.description
+        }
+    }
+}
