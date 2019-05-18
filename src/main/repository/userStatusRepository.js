@@ -1,7 +1,7 @@
 require("console-info");
 require("console-error");
 var db = require("../main");
-const UserState = require("../domain/userState");
+var UserState = require("../domain/userState");
 
 exports.searchAllUserStatus = async function searchAllUserStatus() {
     console.info('userStatusRepository: searchAllUserStatus');

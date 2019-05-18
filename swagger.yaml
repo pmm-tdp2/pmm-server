@@ -52,6 +52,33 @@ paths:
               schema:
                 type: string
               examples: {}
+    post:
+      tags:
+        - Party
+      description: create a new User Status
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+          x-examples:
+            application/json: |-
+              {
+                "description" : "aDescription"
+              }
+      responses:
+        '200':
+          description: Definition generated from Swagger Inspector
+          schema:
+            $ref: string
+        '500':
+          description: Definition generated from Swagger Inspector
+          schema:
+            type: string
   /userCredentials/login:
     post:
       tags:
