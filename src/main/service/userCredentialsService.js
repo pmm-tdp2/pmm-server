@@ -1,24 +1,28 @@
 var repository = require("../repository/userCredentialsRepository");
 
-
-
-
-
 exports.login = function login(id) {
-  console.info("userCredentialsService: login");
-  return repository.findUserCredentials(id);
+    console.info("userCredentialsService: login");
+    return repository.find(id);
 };
 
 exports.register = function register(userCredentialsRequestDTO) {
-  console.info("userCredentialsService: register");
+    console.info("userCredentialsService: register");
+    return repository.create(userCredentialsRequestDTO);
+    /*
     if (okPreconditionParty(userCredentialsRequestDTO)) {
         if (userCredentialsRequestDTO.id == "USER") {
-            repository.createUser(userCredentialsRequestDTO);
+            repository.createUserCredentials(userCredentialsRequestDTO);
         } else if (userCredentialsRequestDTO.id == "DRIVER") {
             repository.createDriver(userCredentialsRequestDTO);
-        }       
-        repository.createUserCredentials(userCredentialsRequestDTO, partyID);
+        }
+        repository.createUserCredentials(userCredentialsRequestDTO);
     }
+    */
+};
+
+exports.findByPK = function findByPK(id) {
+    console.info("userCredentialsService: findByPK");
+    return repository.find(id);
 };
 
 function okPreconditionParty(userCredentialsRequestDTO) {

@@ -78,6 +78,6 @@ exports.UserCredentialsRequestDTO = class UserCredentialsRequestDTO {
             this.firstName = arg.firstName;
             this.lastName = arg.lastName;
         }
-
+        this.name = this.firstName + " " + this.lastName;
     }
 }

@@ -1,7 +1,7 @@
 require("console-info");
 require("console-error");
 var db = require("../main");
-var UserState = require("../domain/userState");
+var UserState = require("../domain/userState").UserState;
 
 exports.searchAllUserStatus = async function searchAllUserStatus() {
     console.info('userStatusRepository: searchAllUserStatus');
@@ -24,7 +24,6 @@ exports.searchAllUserStatus = async function searchAllUserStatus() {
 exports.findAll = async function findAll() {
     console.info("userStatusRepository: findAll");
     return new Promise(function(resolve, reject) {
-        var us = null;
         try {
             UserState.findAll()
                 .then(data => resolve(data))
