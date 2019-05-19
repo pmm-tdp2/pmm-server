@@ -12,7 +12,7 @@ var partyResource = require("./resource/partyResource"),
     traceResource = require("./resource/traceResource"),
     bodyParser = require("body-parser");
 
-const models = require("./domain/sequelize");
+var models = require("./domain/sequelize");
 models.sequelize
     .authenticate()
     .then(() => {
