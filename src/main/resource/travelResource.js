@@ -150,4 +150,34 @@ app.post("/travel/finalize", function (req, res) {
     }
 });
 
+app.post("/travel/cancel", function(req, res){
+    console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
+    var aTravelFinalizeRequesDTO = new travelDTOModel.TravelFinalizeRequesDTO(req.body);
+    var connectionUsers = allSockets.connectionUsers;
+    var connectionDrives = allSockets.connectionDrivers;
+    var aConnectionUser = null;
+    try {
+        try {
+            if (connectionUsers != undefined) {
+                aConnectionUser = connectionUsers.values().next().value; 
+            }
+        } catch (err) {
+            console.error(err);
+        }
+        if (aConnectionUser == null || aConnectionUser == undefined) {
+            console.error("There are no Users");
+            res.status(204).send({status:204, message:"There are not Users"});
+        } else {
+            console.info("Cancel Travel");
+            var aTravel = travelService.finalizeTravel(aTravelFinalizeRequestDTO.travelID);
+            aConnectionUser.socket.emit("NOTIFICATION_CANCELED_OF_TRAVEL", {message:"Canceled"});
+            //TODO: puntuar al chofer con 0;
+            res.status(200).send({status:200, message:"Canceled ok"});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 module.exports = app;
