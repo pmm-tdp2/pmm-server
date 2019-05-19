@@ -36,13 +36,15 @@ exports.DriverSearchDTO = class DriverSearchDTO {
     }
 }
 
-class PartyDTO {
+var PartyDTO = class PartyDTO {
     constructor() {
-        this.id;
+        this.partyID;
         this.firstName;
         this.lastName;
     }
 }
+
+exports.PartyDTO = PartyDTO;
 
 exports.DriverDTO = class DriverDTO extends PartyDTO {
     constructor() {
