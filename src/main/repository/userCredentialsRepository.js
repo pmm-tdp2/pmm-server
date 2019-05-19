@@ -27,7 +27,7 @@ exports.create = async function create(userCredentialsRequestDTO) {
     console.info("userCredentialsRepository: create");
     return new Promise(function(resolve, reject) {
         try {
-            UserCredentials.create({ user_credentials_id: userCredentialsRequestDTO.id })
+            UserCredentials.create({ user_credentials_id: userCredentialsRequestDTO.id, user_state_id: statusCreatedID })
                 .then(us => resolve(us))
                 .catch(err => {
                     console.log(err);

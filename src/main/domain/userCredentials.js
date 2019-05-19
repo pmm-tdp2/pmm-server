@@ -32,6 +32,10 @@ UserCredentials.init({
     last_login_date: {
         type: Sequelize.DATE,
         allowNull: true
+    },
+    user_state_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
 }, { sequelize, modelName: 'user_credentials', freezeTableName: true })
 
