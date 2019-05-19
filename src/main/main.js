@@ -21,10 +21,39 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+var value = 0;
+
+iyem = require('iyem');
+
 app.get("/home", (req, res) => {
+
     console.info("response " + req.url);
-    res.send("hello !!!");
+    var time = 1000;
+    if(value==1){
+        time = 2000;
+    }
+    value=1;
+
+    console.log("entra al home");
+    let slowProcess = iyem.create(
+        function(){console.log("entra al thread: ");
+        setTimeout(()=>{
+            console.log("entra al timeout");
+            //res.send("hello ! !!  ");
+            $.finish(0); 
+        },2000);     
+    });
+
+    slowProcess.start().onFinish((result)=>{
+        console.log("response:" +result);
+        res.send("hello ! !!  ");
+    });
+
+    if(time == 2000){
+        value = 0;
+    }
 });
+
 // parse application/json
 app.use(bodyParser.json({limit: '5mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));

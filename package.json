@@ -17,7 +17,9 @@
     "sequelize": "5.8.5",
     "socket.io": "^2.2.0",
     "swagger-ui-express": "4.0.2",
-    "yamljs": "0.3.0"
+    "yamljs": "0.3.0",
+    "iyem":"^1.0.3",
+    "semaphore":"^1.1.0"
   },
   "devDependencies": {},
   "scripts": {
