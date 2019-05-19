@@ -4,17 +4,32 @@ var express = require("express"),
     app = express(),
     traceModel = require("../model/trace"),
     traceService = require("../service/mock/traceServiceMock");
-    allSockets = require("../main"),
+    allSockets = require("../main");
 
 app.post("/trace", function(req, res) {
     console.info("traceResource :" + req.url+ ". Body : " + JSON.stringify(req.body));
     var trace = new traceModel.Trace(req.body);
     var message = traceService.saveTrace(trace)
 
+    /**
+     * save position driver to obtain later when user request driver
+     * a optimum driver
+     */
+    var positionsDrivers = allSockets.positionsDrivers;
+    positionsDrivers.put(trace.driverID,trace.geograficCoordenate);
+
+    /**
+     * TODO: broadcast for all users sending positions driver
+     * - only drivers near the user
+     * - all drivers and user draw those that are close
+     */
+
+
     //mock send data to user
 	//Hernan, you have fix this
     //var travelID = req.body.travelID;
     var connectionUsers = allSockets.connectionUsers;
+
     var aConnectionUser = null;
     try {
         if (connectionUsers != undefined) {

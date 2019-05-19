@@ -45,16 +45,53 @@ app.post("/travel/cotization", function (req, res) {
     }
 });
 
+
+app.post("/travel/cancel", function (req, res) {
+
+
+    //TODO: edit DB travel
+    
+    //TODO: add score the driver with 0
+
+    //find the user associated to travel
+    var connectionUsers = allSockets.connectionUsers;
+    var aConnectionUser;
+    try {
+        if (connectionUsers != undefined) {
+            aConnectionUser = connectionUsers.values().next().value; 
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    //notify to user
+
+    if (aConnectionUser == null || aConnectionUser == undefined) {
+        console.error("There are no Users");
+        res.status(204).send({status:204, message:"There are not Users"});
+    } else {
+        try {
+            aConnectionUser.socket.emit("CANCEL_OF_TRAVEL", "soy un harcodeo");
+            res.status(200).send({status:200, messsage:"cancelation received successfully"});
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    }
+});
+
+
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
+    var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionDriver = null;
     if (aTravelConfirmationRequestDTO.rol == "USER") {
         try {
-            if (connectionDrives != undefined) {
-                aConnectionDriver = connectionDrives.values().next().value; 
+            if (connectionDrivers != undefined) {
+                //aConnectionDriver = connectionDrivers.values().next().value;
+                var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
+                aConnectionDriver = travelService.findBetterDriver(aTravel);
             }
         } catch (err) {
             console.error(err);
@@ -88,6 +125,25 @@ app.post("/travel/confirmation", function (req, res) {
     }
     var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
+
+        //evaluate if user is connected
+
+        //find drivers
+
+        //notify to driver
+        /**
+         * TODO: se dede establecer un tiempo maximo para la respuesta
+         * 
+         */
+
+
+
+
+
+
+
+
+        
         try {
             if (connectionUsers != undefined) {
                 aConnectionUser = connectionUsers.values().next().value; 
@@ -125,7 +181,7 @@ app.post("/travel/finalize", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelFinalizeRequestDTO = new travelDTOModel.TravelFinalizeRequesDTO(req.body);
     var connectionUsers = allSockets.connectionUsers;
-    var connectionDrives = allSockets.connectionDrivers;
+    var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionUser = null;
     try {
         try {
