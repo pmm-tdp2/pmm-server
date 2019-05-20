@@ -89,6 +89,7 @@ managerTravelRequest = require("../service/travelRequestManagerService")
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
+    console.log("#######: "+JSON.stringify(aTravelConfirmationRequestDTO));
     var connectionUsers = allSockets.connectionUsers;
     var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionDriver = null;
@@ -100,12 +101,17 @@ app.post("/travel/confirmation", function (req, res) {
         managerTravelRequest.manageTravelRequest(aTravelConfirmationRequestDTO.travelID)
         .then((value)=>{
             console.log("respuesta de manager: "+value);
-            if(value == 0){
+            //if(value == 0){
                 res.status(200).send({status:200, message: "se está buscando el chofer"});
-            }else if (value ==-1){
-                res.status(400).send({status:400, message: "error"});
-            }
+            //}else if (value ==-1){
+                //res.status(400).send({status:400, message: "error"});
+            //}
         })
+        .catch((value)=>{
+            console.log("respuesta de manager: "+value);
+            res.status(400).send({status:400, message: "error"});
+        })
+        
 
         
         //the user has solicited a travel
@@ -231,16 +237,23 @@ app.post("/travel/confirmation", function (req, res) {
     }
     var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
-
+        console.log("&&&&&&&&&&&&&& respeusta &&&&&&&&&&&&&&&&");
         //if travel is rejected
-        if(!aTravelConfirmationRequestDTO.status){
+        if(!aTravelConfirmationRequestDTO.accept){
+            console.log("&&&&&&&&&&&&&& travel is rejected &&&&&&&&&&&&&&&&&&");
             responseOfDriverToTravels.set(aTravelConfirmationRequestDTO.travelID,false);
+            res.status(200).send({status:200, message:"viaje rechazado correctamente"});
         }else{
             //travel is accepted
             responseOfDriverToTravels.set(aTravelConfirmationRequestDTO.travelID,true);
+            console.log("&&&&&&&&&&&&&&&&&& travel is accepted &&&&&&&&&&&&&&&&&&");
+            
+            //HARCODEOOOOOO
+            res.status(200).send({status:200, message:"viaje aceptado correctamente"});
+
 
             //notify to user
-            try {
+            /*try {
                 if (connectionUsers != undefined) {
                     aConnectionUser = connectionUsers.values().next().value; 
                 }
@@ -269,7 +282,7 @@ app.post("/travel/confirmation", function (req, res) {
                 } catch (error) {
                     res.status(500).send(error);
                 }
-            }
+            }*/
         }
     }
 });

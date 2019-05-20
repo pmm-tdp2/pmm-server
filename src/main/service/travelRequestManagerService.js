@@ -38,24 +38,31 @@ function manageTravelRequest(travelID){
         var radiusB = 4000;
         var radiusC = 8000;
         var radiusD = 12000;
-        var radiusE = 20000;
-        var allRadius = [radiusA,radiusB,radiusC,radiusD,radiusE];
+        var allRadius = [radiusA,radiusB,radiusC,radiusD];
         var radiusSelected=radiusA;
         var driverFound = false
         var excludedDrivers = new Array();
         var indexRadius = 0;
         var amountDriversNotified = 0;
-        var maxDriversNotified = 3
+        var MAXDRIVERSNOTIFICATIONS = 3
+        var AMOUNT_BUCLES_TO_WAIT = 6;
+        var TIME_TO_WAIT = 5000; //5 seconds
         var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
     
         function bucleFunction(indexRadius,amountDriversNotified){
             console.log("VALORES::::indice: "+ indexRadius+ "  %%  notificaciones: "+amountDriversNotified);
             return new Promise((resolve,reject)=>{
+
+                if(indexRadius >= allRadius.length || amountDriversNotified >= MAXDRIVERSNOTIFICATIONS ){
+                    reject(0);
+                }
+
                 //select radius
                 radiusSelected = allRadius[indexRadius];
+                console.log("RADIO ELEGIDO: "+radiusSelected);
         
                 //obtain best driver
-                console.log("buscando choferes con un radio en m de : "+radiusSelected);
+                console.log("buscando choferes con un radio en metros de : "+radiusSelected);
                 var aDriverSelected = null;
                 aDriverSelected = findBestDriver(travelID,radiusSelected,excludedDrivers);
                 
@@ -64,37 +71,83 @@ function manageTravelRequest(travelID){
                         
                     amountDriversNotified++;
                     //obtener socket y notificar al chofer
+                    //notificando socket....
 
-                    //timer de espera
-                    var amountBucles = 0;
-                    var maxAmountBucles = 12;
-
-                    //map que sirve para ver las respuestas de los choferes
+                    //map donde se almacenan las respuestas de los choferes
                     var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
 
-                    console.log("empieza simulación del timeout");
-                    //while(amountBucles < maxAmountBucles){
-                        setTimeout(()=>{
-                            console.log("entro al timeout");
-                            //quiero que termine cuando envia a dos choferes
-                            if (amountDriversNotified > 1){
-                                resolve(true);
-                            }else{
-                                bucleFunction(indexRadius,amountDriversNotified)
-                                .then((value)=>{
-                                    if(value) {
-                                        console.log("salió por value");
-                                        resolve(true);
+                    console.log("empieza simulación del timeout para el chofer");
+
+                    function waitResponseDriver(amountIterations) {
+                        return new Promise((resolveTimeout,rejectTimeout)=>{
+                            setTimeout(()=>{
+                                console.log("==============entro al timeout==================");
+                                    amountIterations--;
+                                    //quiero que termine cuando envia a dos choferes
+                                    if (amountIterations <= 0){
+                                        //Timeout
+                                        rejectTimeout(amountIterations);
+                                    }else{
+                                        console.log("evaluandooooooo si responde el chofer con id: "+travelID);
+                                    
+                                        if(responseOfDriverToTravels.has(travelID)){
+                                            console.log("el chofer respondió");
+                                            amountIterations=0;
+                                            if(responseOfDriverToTravels.get(travelID)){
+                                                console.log("el chofer ACEPTO");
+                                                driverFound= true;
+                                                resolveTimeout(true);
+                                            }else{
+                                                //agregar el chofer para excluirlo de la búsqueda
+                                                console.log("el chofer RECHAZO");
+                                                excludedDrivers.push(aDriverSelected.id);
+                                                resolveTimeout(false);
+                                            }
+                                        }else{
+                                            //si aún no responde seguir iterando
+                                            waitResponseDriver(amountIterations)
+                                            /*.then((response)=>{
+                                                resolve(response);
+                                            })
+                                            .catch((response)=>{
+                                                reject(response);
+                                            })*/
+                                            .then((dataResponse)=>{
+                                                if(dataResponse==true){
+                                                    console.log("El ciclo terminó y el chofer aceptó el viaje");
+                                                    resolve(dataResponse);
+                                                }else{
+                                                    console.log("El ciclo terminó y el chofer rechazó el viaje");
+                                                    reject(dataResponse);
+                                                }
+                                            })
+                                            .catch((data)=>{
+                                                console.log("TIMEOUT");
+                                                reject(data);
+                                            })
+                                        }
                                     }
-                                })
-                            }
-                        },5000); 
-                    //}
-    
-                    if(amountBucles >= maxAmountBucles){
-                        driverFound= true;
-                        console.log("probando la salida del bucle....");
+                            },TIME_TO_WAIT);
+
+                        })
                     }
+
+                    //llamando a waitResponseDriver por primera vez
+                    waitResponseDriver(AMOUNT_BUCLES_TO_WAIT)
+                    .then((dataResponse)=>{
+                        if(dataResponse==true){
+                            console.log("El ciclo terminó y el chofer aceptó el viaje");
+                            resolve(dataResponse);
+                        }else{
+                            console.log("El ciclo terminó y el chofer rechazó el viaje");
+                            reject(dataResponse);
+                        }
+                    })
+                    .catch((data)=>{
+                        console.log("TIMEOUT");
+                        reject(data);
+                    })
+
                     console.log("mensaje desde afuera del timeout");
         
                 }else{
@@ -102,20 +155,27 @@ function manageTravelRequest(travelID){
                     bucleFunction(indexRadius++,amountDriversNotified)
                     .then((value)=>{
                         if(value) {
-                            console.log("salió por value");
-                            resolve(true);
+                            console.log("se encontró el chofer incrementando el radio a: "+indexRadius);
+                            resolve(value);
                         }
                     })
+                    .catch((value)=>{
+                        console.log("No se encontró el chofer incrementando el radio a "+indexRadius);
+                        reject(value)
+                    });
                 }
             });
         }
     
+        //llamando a bucleFunction
         bucleFunction(indexRadius,amountDriversNotified)
         .then((value)=>{
-            if(value) {
-                console.log("salió por value");
-                resolve(0);
-            }
+            console.log("saliendo de la búsqueda del chofer y se acepto el viaje");
+            resolve(value);
+        })
+        .catch((value)=>{
+            console.log("saliendo de la búsqueda del chofer y NO se acepto el viaje");
+            reject(value);
         })
     });
 }
