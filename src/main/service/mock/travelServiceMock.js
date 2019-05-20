@@ -105,33 +105,55 @@ module.exports = {
         return aTravel;
     },
 
-    findDriversToTravel : function findDriversToTravel(travelID, searchRadius) {
+    /**
+     * @param {travelID to obtain point origin of travel} travelID 
+     * @param {radius in meters} searchRadius 
+     * @param {drivers excluded for this travel} excludedDrivers 
+     */
+    /*findDriversToTravel : function findDriversToTravel(travelID, searchRadius, excludedDrivers) {
         console.info("travelServiceMock: "+ "findDriversToTravel. travelID: "+ travelID);
-        var possibleDrivers = new Array();
+        var candidateDrivers = new Array();
 
-        //find optimum driver for user
+        // find optimum driver for user
         // is a map that contain (key,value) -> (travelID, GeographicCoordinate)
         var positionsDrivers = allSockets.positionsDrivers;
 
         var aTravel = travelService.findTravelById(aTravelConfirmationRequestDTO.travelID);
-        var possibleDrivers = new Array();
-        var aDriverMinimumPriority = null;
+        var candidateDrivers = new Array();
+
         positionsDrivers.forEach( (value, key, positionsDrivers) => {
-            distance = haversine(value, aTravel.from);
+            distance = haversine(value, aTravel.from,{unit: 'meter'});
             if(distance < searchRadius){
                 var aDriver = findDriver(key);
-                possibleDrivers.push(aDriver);
+                candidateDrivers.push(aDriver);
             }
         });
 
+        if (candidateDrivers.length == 0)
+            return null;
+
         //ordering drivers in descending order
-        possibleDrivers.sort( function (a,b){
-            return b.priority - c.priority;
+        //atribiute priority is score + pointsCategory
+        candidateDrivers.sort( function (a,b){
+            return b.priority - a.priority;
         });
 
-        //return only 3 drivers
-        return possibleDrivers.length < 3 ? possibleDrivers :
-        positionsDrivers.slice(0,2)
-    }
+        //take out excluded drivers
+        if(excludedDrivers != null ){
+            excludedDrivers.forEach(driverID => {
+
+                //find index of element
+                index = candidateDrivers.findIndex(driver => {
+                    return driver.id == driverID;
+                })
+                //remove element
+                candidateDrivers.splice(0,index);
+            });
+        }    
+
+        //returns less than 4 drivers
+        return candidateDrivers.length < 3 ? candidateDrivers :
+        candidateDrivers.slice(0,2)
+    }*/
 
 }

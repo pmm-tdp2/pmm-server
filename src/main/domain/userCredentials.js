@@ -6,7 +6,7 @@ var UserState = require('./userState');
 
 var UserCredentials = sequelize.define('user_credentials', {
     user_credentials_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         notEmpty: true,
         primaryKey: true
@@ -36,9 +36,9 @@ var UserCredentials = sequelize.define('user_credentials', {
         allowNull: true
     }
 }, {
-        freezeTableName: true
-    });
+    freezeTableName: true
+});
 
-UserCredentials.belongsTo(UserState, {foreignKey: 'user_state_id', constraints: false});
+UserCredentials.belongsTo(UserState, { foreignKey: 'user_state_id', constraints: false });
 
 module.exports = UserCredentials;

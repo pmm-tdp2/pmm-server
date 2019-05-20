@@ -7,7 +7,7 @@ var Party = require('./party');
 
 var Driver = sequelize.define("driver", {
     party_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         notEmpty: true,
         primaryKey: true
@@ -24,6 +24,6 @@ var Driver = sequelize.define("driver", {
     freezeTableName: true
 });
 
-Driver.belongsTo(Party, {foreignKey: 'party_id', constraints: false});
+Driver.belongsTo(Party, { foreignKey: 'party_id', constraints: false });
 
 module.exports = Driver;

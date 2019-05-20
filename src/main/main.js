@@ -13,7 +13,8 @@ var partyResource = require("./resource/partyResource"),
     scoreResource = require("./resource/scoreResource"),
     traceResource = require("./resource/traceResource"),
     fileDocumentsResource = require("./resource/fileDocumentsResource"),
-    bodyParser = require("body-parser");
+    connectionModel = require("../main/model/connection")
+bodyParser = require("body-parser");
 
 var sequelize = require('./domain/sequelize');
 sequelize

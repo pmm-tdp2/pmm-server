@@ -31,10 +31,14 @@ exports.TravelConfirmationRequestDTO = class TravelConfirmationRequestDTO {
             if (arg.has('id')) {
                 this.id = arg.get('id');
             }
+            if (arg.has('accept')) {
+                this.id = arg.get('accept');
+            }
         } else {
             this.travelID = arg.travelID;
             this.rol = arg.rol;
             this.id = arg.id;
+            this.accept = arg.accept;
         }
     }
 };

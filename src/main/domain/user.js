@@ -11,7 +11,7 @@ var FileDocuments = require("./fileDocuments");
 
 var User = sequelize.define('user', {
     party_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         notEmpty: true,
         primaryKey: true
@@ -21,7 +21,7 @@ var User = sequelize.define('user', {
 });
 
 
-User.belongsTo(Party, {foreignKey: 'party_id', constraints: false});
+User.belongsTo(Party, { foreignKey: 'party_id', constraints: false });
 
 async function syncModel() {
     console.log('before');
