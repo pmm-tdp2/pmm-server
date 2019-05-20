@@ -45,7 +45,4 @@ UserCredentials.belongsTo(UserState, {
     },
 });
 
-UserState.sync();
-UserCredentials.sync();
-
 exports.UserCredentials = UserCredentials;
