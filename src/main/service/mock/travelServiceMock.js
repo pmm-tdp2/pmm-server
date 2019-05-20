@@ -50,6 +50,9 @@ module.exports = {
         aTravel.price = 0;
         aTravel.price += aTravel.distance * process.env.PRICE_PER_KM;
         aTravel.price += aTravel.time * process.env.PRICE_PER_MINUTE;
+        if (!aTravel.petAmountSmall) aTravel.petAmountSmall = 0;
+        if (!aTravel.petAmountMedium) aTravel.petAmountMedium = 0;
+        if (!aTravel.petAmountBig) aTravel.petAmountBig = 0;
         aTravel.price += (aTravel.petAmountSmall + aTravel.petAmountMedium +  aTravel.petAmountBig) * process.env.PRICE_PER_PET;
         if (aTravel.hasACompanion) aTravel.price += process.env.PRICE_COMPANION;
 
