@@ -43,7 +43,25 @@ module.exports = {
         aTravel.userID = driverSearchDTO.userID;
         aTravel.distance = haversine(driverSearchDTO.from, driverSearchDTO.to);
         aTravel.time = aTravel.distance / process.env.TIME_PER_KM;
-        aTravel.price = aTravel.distance * process.env.PRICE_PER_KM;
+        aTravel.price = 0;
+        aTravel.price += aTravel.distance * process.env.PRICE_PER_KM;
+        aTravel.price += aTravel.time * process.env.PRICE_PER_MINUTE;
+        aTravel.price += (aTravel.petAmountSmall + aTravel.petAmountMedium +  aTravel.petAmountBig) * process.env.PRICE_PER_PET;
+        if (aTravel.hasACompanion) aTravel.price += process.env.PRICE_COMPANION;
+
+        var date = new Date();
+        var current_hour = date.getHours();
+
+        if (process.env.MAX_HOUR_NIGHT > process.env.MIN_HOUR_NIGHT){
+            if (current_hour >= process.env.MIN_HOUR_NIGHT && current_hour < process.env.MAX_HOUR_NIGHT){
+                aTravel.price += aTravel.price*process.env.PERCENTAGE_NIGHT_PRICE;
+            }
+        }else{
+            if ((current_hour >= process.env.MIN_HOUR_NIGHT && current_hour < 0) || (current_hour >= 0 && current_hour <= process.env.MIN_HOUR_NIGHT)){
+                aTravel.price += aTravel.price*process.env.PERCENTAGE_NIGHT_PRICE;
+            } 
+        }
+        
         var cotizatedStatus = travelModel.getAllStates().get(1);
         aTravel.states.push(cotizatedStatus);
         if (!travels.has(travelID)) {
