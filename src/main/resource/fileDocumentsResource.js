@@ -1,28 +1,14 @@
 require('console-info');
 require('console-error');
-var UserStatus = require('../model/userStatus').UserStatus;
 
 var express = require("express"),
     app = express(),
-    userStatusService = require("../service/userStatusService");
+    fileDocumentsService = require("../service/fileDocumentsService");
 
-app.get("/userStatus", function(req, res) {
-    console.info("userStatusResource :" + req.url);
+app.post("/fileDocuments", function(req, res) {
+    console.info("fileDocumentsResource :" + req.url + ". Body : " + JSON.stringify(req.body));
     try {
-        userStatusService.findAll()
-            .then(data => res.status(200).send(data))
-            .catch(function(err) { res.status(500).send(err) });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error);
-    }
-});
-
-app.post("/userStatus", function(req, res) {
-    console.info("userStatusResource :" + req.url + ". Body : " + JSON.stringify(req.body));
-    var us = new UserStatus(req.body);
-    try {
-        userStatusService.create(us)
+        fileDocumentsService.create(req.body)
             .then(us => res.status(200).send(us))
             .catch(err => res.status(500).send(err));
     } catch (error) {
