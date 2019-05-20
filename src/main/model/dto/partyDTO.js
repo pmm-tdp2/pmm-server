@@ -59,11 +59,11 @@ exports.UserDTO = class UserDTO extends PartyDTO {
     }
 }
 
-exports.UserCredentialsRequestDTO = class UserCredentialsRequestDTO {
+exports.PartyCredentialsRequestDTO = class PartyCredentialsRequestDTO {
     constructor(arg) {
         if (arg instanceof Map) {
             if (arg.has('id')) {
-                this.id = arg.get('id');
+                this.partyID = arg.get('id');
             }
             if (arg.has('rol')) {
                 this.rol = arg.get('rol');
@@ -75,7 +75,7 @@ exports.UserCredentialsRequestDTO = class UserCredentialsRequestDTO {
                 this.lastName = arg.get('lastName');
             }
         } else {
-            this.id = arg.id;
+            this.partyID = arg.id;
             this.rol = arg.rol;
             this.firstName = arg.firstName;
             this.lastName = arg.lastName;

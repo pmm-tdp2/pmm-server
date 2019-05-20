@@ -2,11 +2,11 @@ require("console-info");
 require("console-error");
 var Party = require('../domain/party');
 
-exports.create = function create(party) {
+exports.create = function create(partyCredentialsRequestDTO) {
     console.info("PartyRepository: create");
     return new Promise(function(resolve, reject) {
         try {
-            Party.create({ party_id: party.partyID })
+            Party.create({ party_id: partyCredentialsRequestDTO.partyID })
                 .then(p => resolve(p))
                 .catch(err => {
                     console.log(err);

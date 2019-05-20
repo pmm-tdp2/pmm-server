@@ -3,8 +3,9 @@ require("console-error");
 var express = require("express"),
     app = express(),
     userCredentialsService = require("../service/userCredentialsService"),
-    partyDTOModel = require("../model/dto/partyDTO"),
-    parser = require("body-parser");
+    userService = require("../service/userService"), 
+    driverService = require("../service/driverService"), 
+    partyDTOModel = require("../model/dto/partyDTO");
 
 app.get("/userCredentials/:id", function(req, res) {
     console.info(
@@ -65,58 +66,67 @@ app.post("/userCredentials/login", function(req, res) {
 });
 
 app.post("/userCredentials/register", function(req, res) {
-    console.info(
-        "userCredentialsResource :" +
-        "Verb : " +
-        req.url +
-        ". Body : " +
-        JSON.stringify(req.body)
-    );
+    console.info("userCredentialsResource :" + "Verb : " + req.url + ". Body : " + JSON.stringify(req.body));
     try {
-        var userCredentialsRequestDTO = new partyDTOModel.UserCredentialsRequestDTO(
-            req.body
-        );
+        var partyCredentialsRequestDTO = new partyDTOModel.PartyCredentialsRequestDTO(req.body);
         userCredentialsService
-            .findByPK(userCredentialsRequestDTO.id)
-            .then(uc => {
-                if (uc != null) {
-                    res.status(203).send({ status: 203, message: "User already exists" });
-                } else {
-                    userCredentialsService
-                        .register(userCredentialsRequestDTO)
+        .findByPK(partyCredentialsRequestDTO.partyID)
+        .then(uc => {
+            if (uc != null) {
+                res.status(203).send({ status: 203, message: "User already exists" });
+            } else {
+                if (partyCredentialsRequestDTO.rol == "USER") {
+                    console.info("Registring a user");
+                    userService.create(partyCredentialsRequestDTO)
+                    .then(u => {
+                         userCredentialsService
+                        .register(partyCredentialsRequestDTO)
                         .then(function(result) {
                             if (result != null) {
-                                res
-                                    .status(200)
-                                    .send(
-                                        JSON.stringify({
-                                            status: 200,
-                                            message: "register successfuly"
-                                        })
-                                    );
+                                res.status(200).send(JSON.stringify({status: 200,message: "User register successfuly"}));
                             }
                         })
                         .catch(err => {
                             console.error(err);
-                            res
-                                .status(500)
-                                .send(
-                                    JSON.stringify({ status: 500, message: "unexpected error" })
-                                );
+                            res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
                         });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
+                    });
+                } else if (partyCredentialsRequestDTO.rol == "DRIVER") {
+                    console.info("Registring a driver");
+                    driverService.create(partyCredentialsRequestDTO)
+                    .then(d => {
+                        userCredentialsService
+                        .register(partyCredentialsRequestDTO)
+                        .then(function(result) {
+                            if (result != null) {
+                                res.status(200).send(JSON.stringify({status: 200,message: "Driver register successfuly"}));
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
+                        });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
+                    });
+                } else {
+                    res.status(500).send(JSON.stringify({ status: 500, message: "rol incorrect" }));
                 }
-            })
-            .catch(err => {
-                console.error(err);
-                res
-                    .status(500)
-                    .send(JSON.stringify({ status: 500, message: "unexpected error" }));
-            });
+            } 
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
+        });
     } catch (err) {
         console.error(err);
-        res
-            .status(500)
-            .send(JSON.stringify({ status: 500, message: "unexpected error" }));
+        res.status(500).send(JSON.stringify({ status: 500, message: "unexpected error" }));
     }
 });
 

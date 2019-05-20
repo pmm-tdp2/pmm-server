@@ -5,9 +5,9 @@ exports.login = function login(id) {
     return repository.find(id);
 };
 
-exports.register = function register(userCredentialsRequestDTO) {
+exports.register = function register(partyCredentialsRequestDTO) {
     console.info("userCredentialsService: register");
-    return repository.create(userCredentialsRequestDTO);
+    return repository.create(partyCredentialsRequestDTO);
     /*
     if (okPreconditionParty(userCredentialsRequestDTO)) {
         if (userCredentialsRequestDTO.id == "USER") {

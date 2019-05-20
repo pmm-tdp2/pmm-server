@@ -23,11 +23,11 @@ exports.findUserCredentials = function findUserCredentials(id) {
     });
 };
 
-exports.create = function create(userCredentialsRequestDTO) {
+exports.create = function create(partyCredentialsRequestDTO) {
     console.info("userCredentialsRepository: create");
     return new Promise(function(resolve, reject) {
         try {
-            UserCredentials.create({ user_credentials_id: userCredentialsRequestDTO.id, user_state_id: statusCreatedID })
+            UserCredentials.create({ user_credentials_id: partyCredentialsRequestDTO.partyID, user_state_id: statusCreatedID, party_id: partyCredentialsRequestDTO.partyID })
                 .then(us => resolve(us))
                 .catch(err => {
                     console.error(err);
