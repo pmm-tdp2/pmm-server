@@ -98,6 +98,7 @@ io.on('connection', (socket) => {
             //adding driver to save his position for algorithm find driver for travel
             exports.positionDrivers = positionDrivers.set(driverID,null);
         }
+        console.log("response connect");
         socket.emit("ROL_RESPONSE", connection.id);
     });
 
@@ -117,6 +118,7 @@ io.on('connection', (socket) => {
             var connection = connectionDrivers.get(socket.id);
             positionDrivers.delete(connection.driverID);
         }
+        console.log("disconnect");
         socket.disconnect(true);
     });
     socket.emit("message", {

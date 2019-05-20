@@ -3,6 +3,7 @@ var iyem = require("iyem");
 var travelService = require("./mock/travelServiceMock");
 var haversine = require("haversine");
 var travelResource = require("../resource/travelResource");
+var travelDTOModel = require("../model/dto/travelDTO");
 var sem = require('semaphore')(1);
 
 /*function manageTravelRequest(travelID){
@@ -40,21 +41,25 @@ function manageTravelRequest(travelID){
         var radiusD = 12000;
         var allRadius = [radiusA,radiusB,radiusC,radiusD];
         var radiusSelected=radiusA;
-        var driverFound = false
         var excludedDrivers = new Array();
         var indexRadius = 0;
         var amountDriversNotified = 0;
         var MAXDRIVERSNOTIFICATIONS = 3
         var AMOUNT_BUCLES_TO_WAIT = 6;
         var TIME_TO_WAIT = 5000; //5 seconds
+        var REJECT_ERROR = 0;
+        var REJECT_DRIVER_REQUEST = 1;
+        var REJECT_TIMEOUT = 2;
+        var REJECT_DRIVER_NO_FOUND = 2;
         var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
     
         function bucleFunction(indexRadius,amountDriversNotified){
             console.log("VALORES::::indice: "+ indexRadius+ "  %%  notificaciones: "+amountDriversNotified);
-            return new Promise((resolve,reject)=>{
+            return new Promise((resolveBucle,rejectBucle)=>{
 
                 if(indexRadius >= allRadius.length || amountDriversNotified >= MAXDRIVERSNOTIFICATIONS ){
-                    reject(0);
+                    //reject(REJECT_DRIVER_NO_FOUND);
+                    rejectBucle(REJECT_DRIVER_NO_FOUND);
                 }
 
                 //select radius
@@ -69,99 +74,155 @@ function manageTravelRequest(travelID){
                 if(aDriverSelected != null){
                     console.log("se ha encontrado el mejor chofer con id: "+  aDriverSelected.id);
                         
-                    amountDriversNotified++;
-                    //obtener socket y notificar al chofer
-                    //notificando socket....
-
-                    //map donde se almacenan las respuestas de los choferes
-                    var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
-
-                    console.log("empieza simulación del timeout para el chofer");
-
-                    function waitResponseDriver(amountIterations) {
-                        return new Promise((resolveTimeout,rejectTimeout)=>{
-                            setTimeout(()=>{
-                                console.log("==============entro al timeout==================");
-                                    amountIterations--;
-                                    //quiero que termine cuando envia a dos choferes
-                                    if (amountIterations <= 0){
-                                        //Timeout
-                                        rejectTimeout(amountIterations);
-                                    }else{
-                                        console.log("evaluandooooooo si responde el chofer con id: "+travelID);
-                                    
-                                        if(responseOfDriverToTravels.has(travelID)){
-                                            console.log("el chofer respondió");
-                                            amountIterations=0;
-                                            if(responseOfDriverToTravels.get(travelID)){
-                                                console.log("el chofer ACEPTO");
-                                                driverFound= true;
-                                                resolveTimeout(true);
-                                            }else{
-                                                //agregar el chofer para excluirlo de la búsqueda
-                                                console.log("el chofer RECHAZO");
-                                                excludedDrivers.push(aDriverSelected.id);
-                                                resolveTimeout(false);
-                                            }
-                                        }else{
-                                            //si aún no responde seguir iterando
-                                            waitResponseDriver(amountIterations)
-                                            /*.then((response)=>{
-                                                resolve(response);
-                                            })
-                                            .catch((response)=>{
-                                                reject(response);
-                                            })*/
-                                            .then((dataResponse)=>{
-                                                if(dataResponse==true){
-                                                    console.log("El ciclo terminó y el chofer aceptó el viaje");
-                                                    resolve(dataResponse);
-                                                }else{
-                                                    console.log("El ciclo terminó y el chofer rechazó el viaje");
-                                                    reject(dataResponse);
-                                                }
-                                            })
-                                            .catch((data)=>{
-                                                console.log("TIMEOUT");
-                                                reject(data);
-                                            })
-                                        }
-                                    }
-                            },TIME_TO_WAIT);
-
-                        })
-                    }
-
-                    //llamando a waitResponseDriver por primera vez
-                    waitResponseDriver(AMOUNT_BUCLES_TO_WAIT)
-                    .then((dataResponse)=>{
-                        if(dataResponse==true){
-                            console.log("El ciclo terminó y el chofer aceptó el viaje");
-                            resolve(dataResponse);
-                        }else{
-                            console.log("El ciclo terminó y el chofer rechazó el viaje");
-                            reject(dataResponse);
+                    //obtaining socket of driver
+                    var connectionDrivers = allSockets.connectionDrivers;
+                    var aConnectionDriver = null;
+                    try {
+                        if (connectionDrivers != undefined) {
+                            //obtener el socket del chofer
+                            aConnectionDriver = connectionDrivers.values().next().value;
                         }
-                    })
-                    .catch((data)=>{
-                        console.log("TIMEOUT");
-                        reject(data);
-                    })
+                    } catch (err) {
+                        console.error(err);
+                        console.log("Hubo problemas al tratatar de encontrar el socket del chofer ");
+                        //reject(REJECT_ERROR)
+                        rejectBucle(REJECT_ERROR)
+                    }
+                    
+                    //notify to driver if this is available
+                    if (aConnectionDriver == null || aConnectionDriver == undefined) {
+                        console.error("Driver selected now is dissconnected, id: "+aDriverSelected.id );
+                        console.error("No se pudo obtener el socket del chofer");
+                        //reject(REJECT_ERROR);
+                        rejectBucle(REJECT_ERROR);
+                    } else {
+                        console.info("Driver selected is available");
+                        
+                        // logica de mandar el emit al chofer
 
-                    console.log("mensaje desde afuera del timeout");
+                        console.info("antes de buscar el travel con id: "+travelID);
+
+                        var aTravel = travelService.findTravelByTravelID(travelID);
+
+                        console.info("Luego buscar el travel: "+JSON.stringify(aTravel));
+                        
+                        // build DTO for driver
+
+                        var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
+
+                        aTravelNotificationDTO.travelID = aTravel.travelID;
+                        aTravelNotificationDTO.from = aTravel.from;
+                        aTravelNotificationDTO.to = aTravel.to;
+                        /*aTravelNotificationDTO.petAmountSmall = aTravel.petAmountSmall;
+                        aTravelNotificationDTO.petAmountMedium = aTravel.petAmountMedium;
+                        aTravelNotificationDTO.petAmountLarge = aTravel.petAmountLarge;
+                        aTravelNotificationDTO.hasACompanion = aTravel.hasACompanion;*/
+                        aTravelNotificationDTO.petAmountSmall = 1;
+                        aTravelNotificationDTO.petAmountMedium = 1;
+                        aTravelNotificationDTO.petAmountLarge = 1;
+                        aTravelNotificationDTO.hasACompanion = "Si";
+
+            
+                        //notify to driver
+                        console.info("Luego de crear el DTO para responder");
+
+                        aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
+                        amountDriversNotified++;
+
+                        //map donde se almacenan las respuestas de los choferes
+                        var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
+
+                        console.log("empieza simulación del timeout para el chofer");
+
+                        function waitResponseDriver(amountIterations) {
+                            return new Promise((resolveTimeout,rejectTimeout)=>{
+                                setTimeout(()=>{
+                                    console.log("==============entro al delay ==================");
+                                        amountIterations--;
+                                        //quiero que termine cuando envia a dos choferes
+                                        if (amountIterations <= 0){
+                                            //Timeout
+                                            rejectTimeout(amountIterations);
+                                        }else{
+                                            console.log("evaluandooooooo si responde el chofer con id: "+travelID);
+                                        
+                                            if(responseOfDriverToTravels.has(travelID)){
+                                                console.log("el chofer respondió");
+                                                amountIterations=0;
+                                                var response = responseOfDriverToTravels.get(travelID);
+                                                responseOfDriverToTravels.delete(travelID);
+                                                if(response){
+                                                    console.log("el chofer ACEPTO");
+                                                    resolveTimeout(true);
+                                                }else{
+                                                    //agregar el chofer para excluirlo de la búsqueda
+                                                    console.log("el chofer RECHAZO");
+                                                    excludedDrivers.push(aDriverSelected.id);
+                                                    resolveTimeout(false);
+                                                }
+                                            }else{
+                                                //si aún no responde seguir iterando
+                                                waitResponseDriver(amountIterations)
+                                                .then((dataResponse)=>{
+                                                    if(dataResponse==true){
+                                                        console.log("El ciclo terminóooo y el chofer aceptó el viaje");
+                                                        //resolve(dataResponse);
+                                                        resolveBucle(dataResponse)
+                                                    }else{
+                                                        console.log("El ciclo terminóoo y el chofer rechazó el viaje");
+                                                        //reject(REJECT_DRIVER_REQUEST);
+                                                        rejectBucle(REJECT_DRIVER_REQUEST);
+
+                                                    }
+                                                })
+                                                .catch((data)=>{
+                                                    console.log("TIMEOUT");
+                                                    //reject(REJECT_TIMEOUT);
+                                                    rejectBucle(REJECT_TIMEOUT);
+                                                })
+                                            }
+                                        }
+                                },TIME_TO_WAIT);
+
+                            })
+                        }
+
+                        //llamando a waitResponseDriver por primera vez
+                        waitResponseDriver(AMOUNT_BUCLES_TO_WAIT)
+                        .then((dataResponse)=>{
+                            if(dataResponse==true){
+                                console.log("El ciclo terminó y el chofer aceptó el viaje");
+                                //resolve(dataResponse);
+                                resolveBucle(dataResponse);
+                            }else{
+                                console.log("El ciclo terminó y el chofer rechazó el viaje");
+                                //reject(REJECT_DRIVER_REQUEST);
+                                rejectBucle(REJECT_DRIVER_REQUEST);
+                            }
+                        })
+                        .catch((data)=>{
+                            console.log("TIMEOUT");
+                            //reject(REJECT_TIMEOUT);
+                            rejectBucle(REJECT_TIMEOUT);
+                        });
+
+                        console.log("mensaje desde afuera del timeout");
+                    }
         
                 }else{
-                    //driver not found, increase the radius
-                    bucleFunction(indexRadius++,amountDriversNotified)
+                    //driver not found, increase the radius... se tiene que ver
+                    bucleFunction(++indexRadius,amountDriversNotified)
                     .then((value)=>{
                         if(value) {
                             console.log("se encontró el chofer incrementando el radio a: "+indexRadius);
-                            resolve(value);
+                            //resolve(value);
+                            resolveBucle(value);
                         }
                     })
                     .catch((value)=>{
                         console.log("No se encontró el chofer incrementando el radio a "+indexRadius);
-                        reject(value)
+                        //reject(value)
+                        rejectBucle(value)
                     });
                 }
             });
@@ -174,7 +235,34 @@ function manageTravelRequest(travelID){
             resolve(value);
         })
         .catch((value)=>{
-            console.log("saliendo de la búsqueda del chofer y NO se acepto el viaje");
+            if(value == REJECT_TIMEOUT)
+                console.log("saliendo de la búsqueda por timeout");
+            else if(value == REJECT_DRIVER_REQUEST){
+                console.log("saliendo de la búsqueda. chofer NO se acepto el viaje y se incrementará el radio");
+                console.log("=======================================================================");
+
+                //driver not found, increase the radius... se tiene que ver
+                bucleFunction(++indexRadius,amountDriversNotified)
+                .then((value)=>{
+                    if(value) {
+                        console.log("se encontró el chofer incrementando el radio a: "+indexRadius);
+                        //resolve(value);
+                        resolveBucle(value);
+                    }
+                })
+                .catch((value)=>{
+                    console.log("No se encontró el chofer incrementando el radio a "+indexRadius);
+                    //reject(value)
+                    rejectBucle(value)
+                });
+            }
+            else if(value == REJECT_ERROR)
+                console.log("saliendo de la búsqueda por un error");
+            else if(value == REJECT_DRIVER_NO_FOUND)
+                console.log("saliendo de la búsqueda porque no encontró chofer");
+            else{
+                console.log("error desconocido: "+value);
+            }
             reject(value);
         })
     });
@@ -274,6 +362,8 @@ function findBestDriver(travelID, searchRadius, excludedDrivers){
         if (candidateDrivers.length == 0){
             console.log("no hay choferes candidatos");
             return null;            
+        }else{
+            console.log("antes de la exclusión hay choferes: "+candidateDrivers.length);
         }
 
         //take out excluded drivers
@@ -286,13 +376,16 @@ function findBestDriver(travelID, searchRadius, excludedDrivers){
                     return driver.id == driverID;
                 })
                 //remove driver
-                candidateDrivers.splice(0,index);
+                console.log("removing index: "+index);
+                candidateDrivers.splice(index,1);
             });
         }    
 
         if (candidateDrivers.length == 0){
             console.log("luego de haber excluido a choferes que que rechazaron no queda ninguno");
             return null;
+        }else{
+            console.log("luego de haber excluido  hay choferes: "+candidateDrivers.length);
         }
 
 

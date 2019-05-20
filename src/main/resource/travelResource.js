@@ -102,14 +102,14 @@ app.post("/travel/confirmation", function (req, res) {
         .then((value)=>{
             console.log("respuesta de manager: "+value);
             //if(value == 0){
-                res.status(200).send({status:200, message: "se está buscando el chofer"});
+                res.status(200).send({status:200, message: "su chofer está en camino"});
             //}else if (value ==-1){
                 //res.status(400).send({status:400, message: "error"});
             //}
         })
         .catch((value)=>{
             console.log("respuesta de manager: "+value);
-            res.status(400).send({status:400, message: "error"});
+            res.status(400).send({status:400, message: "No hay choferes en este momento"});
         })
         
 
@@ -237,7 +237,6 @@ app.post("/travel/confirmation", function (req, res) {
     }
     var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
-        console.log("&&&&&&&&&&&&&& respeusta &&&&&&&&&&&&&&&&");
         //if travel is rejected
         if(!aTravelConfirmationRequestDTO.accept){
             console.log("&&&&&&&&&&&&&& travel is rejected &&&&&&&&&&&&&&&&&&");
