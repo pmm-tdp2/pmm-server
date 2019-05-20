@@ -39,7 +39,11 @@ module.exports = {
     createATravel : function createATravel(driverSearchDTO) {
         console.info("travelServiceMock: createATravel");
         travelID = global.incrementID(travelID);
-        var aTravel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to)
+        var aTravel = new travelModel.Travel(travelID, driverSearchDTO.from, driverSearchDTO.to);
+        aTravel.petAmountSmall = driverSearchDTO.petSmallAmount;
+        aTravel.petAmountMedium = driverSearchDTO.petMediumAmount;
+        aTravel.petAmountBig = driverSearchDTO.petLargeAmount;
+        aTravel.hasACompanion = driverSearchDTO.hasACompanion;
         aTravel.userID = driverSearchDTO.userID;
         aTravel.distance = haversine(driverSearchDTO.from, driverSearchDTO.to);
         aTravel.time = aTravel.distance / process.env.TIME_PER_KM;
