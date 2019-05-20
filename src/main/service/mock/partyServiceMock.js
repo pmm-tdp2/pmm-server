@@ -46,13 +46,32 @@ exports.findAllDrivers = function findAllDrivers(){
 var travel = require("../../model/travel")
 var allDrivers =  new Map();
 //var geo = new travel.GeographicCoordenate({latitude:-34.6986,longitude:-58.49});
-var geo = new travel.GeographicCoordenate({latitude:-34.69,longitude:-58.4301});
+/*var geo = new travel.GeographicCoordenate({latitude:-34.69,longitude:-58.4301});
 allDrivers.set(1,geo);
 geo = new travel.GeographicCoordenate({latitude:-34.75,longitude:-58.438});
 allDrivers.set(2,geo);
 geo = new travel.GeographicCoordenate({latitude:-34.3,longitude:-58});
 allDrivers.set(3,geo);
+console.log("cantidad de elementos mock pos: "+allDrivers.size);*/
+
+//var geo = new travel.GeographicCoordenate({latitude:-34.6986,longitude:-58.49});
+
+/*var geo = new travel.GeographicCoordenate({latitude:-54.69,longitude:-58.4301});
+allDrivers.set(1,geo);
+geo = new travel.GeographicCoordenate({latitude:-54.75,longitude:-58.438});
+allDrivers.set(2,geo);
+geo = new travel.GeographicCoordenate({latitude:-54.3,longitude:-58});
+allDrivers.set(3,geo);
+console.log("cantidad de elementos mock pos: "+allDrivers.size);*/
+
+var geo = new travel.GeographicCoordenate({latitude:-34.689,longitude:-58.4345});
+allDrivers.set(1,geo);
+geo = new travel.GeographicCoordenate({latitude:-34.691,longitude:-58.4345});
+allDrivers.set(2,geo);
+geo = new travel.GeographicCoordenate({latitude:-34.690,longitude:-58.4345});
+allDrivers.set(3,geo);
 console.log("cantidad de elementos mock pos: "+allDrivers.size);
+
 
 exports.allDriversMock = allDrivers;
 
