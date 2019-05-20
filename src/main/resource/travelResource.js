@@ -97,14 +97,15 @@ app.post("/travel/confirmation", function (req, res) {
         // launch thread
         console.log("----solicitud de viaje----");
         var value =1;
-        value = managerTravelRequest.manageTravelRequest(aTravelConfirmationRequestDTO.travelID);
-        console.log("respuesta de manager: "+value);
-        if(value == 0){
-            console.log("pero que mierda  ");
-            res.status(200).send({status:200, message: "se está buscando el chofer"});
-        }else if (value ==-1){
-            res.status(400).send({status:400, message: "error"});
-        }
+        managerTravelRequest.manageTravelRequest(aTravelConfirmationRequestDTO.travelID)
+        .then((value)=>{
+            console.log("respuesta de manager: "+value);
+            if(value == 0){
+                res.status(200).send({status:200, message: "se está buscando el chofer"});
+            }else if (value ==-1){
+                res.status(400).send({status:400, message: "error"});
+            }
+        })
 
         
         //the user has solicited a travel
