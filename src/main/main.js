@@ -6,12 +6,15 @@ const PORT = 3000;
 require("custom-env").env("pmm");
 var partyResource = require("./resource/partyResource"),
     userResource = require("./resource/userResource"),
+    driverResource = require("./resource/driverResource"),
     userCredentialsResource = require("./resource/userCredentialsResource"),
     userStatusResource = require("./resource/userStatusResource"),
     travelResource = require("./resource/travelResource"),
     scoreResource = require("./resource/scoreResource"),
     traceResource = require("./resource/traceResource"),
+    fileDocumentsResource = require("./resource/fileDocumentsResource"),
     bodyParser = require("body-parser");
+
 
 var models = require("./domain/sequelize");
 models.sequelize
@@ -35,11 +38,13 @@ models.sequelize
         // Routing to other responsable to handle request
         app.use("/pmm", partyResource);
         app.use("/pmm", userResource);
+        app.use("/pmm", driverResource);
         app.use("/pmm", userCredentialsResource);
         app.use("/pmm", travelResource);
         app.use("/pmm", scoreResource);
         app.use("/pmm", traceResource);
         app.use("/pmm", userStatusResource);
+        app.use("/pmm", fileDocumentsResource);
         app.use(express.static("public"));
 
         var server = app.listen(process.env.PORT || PORT, () => {
