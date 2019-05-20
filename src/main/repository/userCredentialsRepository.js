@@ -1,10 +1,10 @@
 require("console-info");
 require("console-error");
 var db = require("../main");
-var UserCredentials = require('../domain/userCredentials').UserCredentials;
+var UserCredentials = require('../domain/userCredentials');
 const statusCreatedID = 1;
 
-exports.findUserCredentials = async function findUserCredentials(id) {
+exports.findUserCredentials = function findUserCredentials(id) {
     console.info("userCredentialsRepository: findUserCredentials");
 
     return new Promise(function(resolve, reject) {
@@ -23,24 +23,24 @@ exports.findUserCredentials = async function findUserCredentials(id) {
     });
 };
 
-exports.create = async function create(userCredentialsRequestDTO) {
+exports.create = function create(userCredentialsRequestDTO) {
     console.info("userCredentialsRepository: create");
     return new Promise(function(resolve, reject) {
         try {
             UserCredentials.create({ user_credentials_id: userCredentialsRequestDTO.id, user_state_id: statusCreatedID })
                 .then(us => resolve(us))
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                     reject(err);
                 });
         } catch (err) {
-            console.log(err);
+            console.error(err);
             reject(err);
         }
     });
 };
 
-exports.find = async function find(id) {
+exports.find = function find(id) {
     console.info("userCredentialsRepository: find :" + id);
     return new Promise(function(resolve, reject) {
         try {

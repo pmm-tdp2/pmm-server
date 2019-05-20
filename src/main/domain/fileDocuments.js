@@ -1,12 +1,10 @@
 "use strict";
 
-const models = require('./sequelize')
-var Sequelize = models.Sequelize;
-var sequelize = models.sequelize;
-var Party = require('./party').Party;
+var Sequelize = require("sequelize");
+var sequelize = require('./sequelize')
+var Party = require('./party');
 
-class FileDocuments extends Sequelize.Model {}
-FileDocuments.init({
+var FileDocuments = sequelize.define("file_documents", {
     file_documents_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -26,11 +24,10 @@ FileDocuments.init({
         type: Sequelize.STRING,
         allowNull: true
     }
-}, { sequelize, modelName: 'file_documents', freezeTableName: true })
-
-Party.belongsToMany(FileDocuments, {
-    through: 'files',
-    foreignKey: 'file_documents_id'
+}, {
+    freezeTableName: true
 });
 
-exports.FileDocuments = FileDocuments;
+Party.hasMany(FileDocuments, {foreignKey: 'file_document_id', constraints: false});
+
+module.exports = FileDocuments;

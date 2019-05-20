@@ -1,29 +1,27 @@
 "use strict";
 
-const models = require('./sequelize')
-var Sequelize = models.Sequelize;
-var sequelize = models.sequelize;
-var Party = require('./party').Party;
-var Driver = require('./driver').Driver;
-var UserState = require('./userState').UserState;
-var UserCredentials = require('./userCredentials').UserCredentials;
-var FileDocuments = require("./fileDocuments").FileDocuments;
+var Sequelize = require("sequelize");
+var sequelize = require('./sequelize')
+var Party = require('./party');
+var Driver = require('./driver');
+var UserState = require('./userState');
+var UserCredentials = require('./userCredentials');
+var FileDocuments = require("./fileDocuments");
 
-class User extends Sequelize.Model {}
-User.init({
+
+var User = sequelize.define('user', {
     party_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         notEmpty: true,
         primaryKey: true
     }
-}, { sequelize, modelName: 'user', freezeTableName: true })
-
-User.belongsTo(Party, {
-    foreignKey: {
-        field: 'party_id'
-    },
+}, {
+    freezeTableName: true
 });
+
+
+User.belongsTo(Party, {foreignKey: 'party_id', constraints: false});
 
 async function syncModel() {
     console.log('before');
@@ -38,4 +36,4 @@ async function syncModel() {
 
 syncModel();
 
-exports.User = User;
+module.exports = User;

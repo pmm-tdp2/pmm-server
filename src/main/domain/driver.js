@@ -1,12 +1,11 @@
 "use strict";
 
-const models = require('./sequelize')
-var Sequelize = models.Sequelize;
-var sequelize = models.sequelize;
-var Party = require('./party').Party;
+var Sequelize = require("sequelize");
+var sequelize = require('./sequelize')
+var Party = require('./party');
 
-class Driver extends Sequelize.Model {}
-Driver.init({
+
+var Driver = sequelize.define("driver", {
     party_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -21,12 +20,10 @@ Driver.init({
         type: Sequelize.STRING,
         allowNull: true,
     }
-}, { sequelize, modelName: 'driver', freezeTableName: true })
-
-Driver.belongsTo(Party, {
-    foreignKey: {
-        field: 'party_id'
-    },
+}, {
+    freezeTableName: true
 });
 
-exports.Driver = Driver;
+Driver.belongsTo(Party, {foreignKey: 'party_id', constraints: false});
+
+module.exports = Driver;

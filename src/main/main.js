@@ -15,9 +15,8 @@ var partyResource = require("./resource/partyResource"),
     fileDocumentsResource = require("./resource/fileDocumentsResource"),
     bodyParser = require("body-parser");
 
-
-var models = require("./domain/sequelize");
-models.sequelize
+var sequelize = require('./domain/sequelize');
+sequelize
     .authenticate()
     .then(() => {
         console.log("Connection has been established successfully.");

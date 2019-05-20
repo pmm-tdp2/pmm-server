@@ -1,20 +1,18 @@
-"use strict";
+var Sequelize = require("sequelize");
+var sequelize = require('./sequelize')
 
-const models = require('./sequelize')
-var Sequelize = models.Sequelize;
-var sequelize = models.sequelize;
-
-class UserState extends Sequelize.Model {}
-UserState.init({
+var UserState = sequelize.define('user_state', {
     user_state_id: {
-        type: models.Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
     description: {
-        type: models.Sequelize.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     }
-}, { sequelize, modelName: 'user_state', freezeTableName: true })
+}, {
+        freezeTableName: true
+    });
 
-exports.UserState = UserState;
+module.exports = UserState;

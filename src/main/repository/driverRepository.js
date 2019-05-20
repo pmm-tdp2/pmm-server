@@ -1,11 +1,11 @@
 require("console-info");
 require("console-error");
-var Driver = require("../domain/driver").Driver;
-var Party = require("../domain/party").Party;
+var Driver = require("../domain/driver");
+var Party = require("../domain/party");
 
-exports.create = async function create(driver) {
+exports.create = function create(driver) {
     console.info("DriverRepository: create");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Party.create({ party_id: driver.partyID })
                 .then(p => {
@@ -27,9 +27,9 @@ exports.create = async function create(driver) {
     });
 };
 
-exports.find = async function find(id) {
+exports.find = function find(id) {
     console.info("DriverRepository: find :" + id);
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Driver.findByPk(id)
                 .then(u => resolve(u))
@@ -44,9 +44,9 @@ exports.find = async function find(id) {
     });
 };
 
-exports.findAll = async function findAll() {
+exports.findAll = function findAll() {
     console.info("DriverRepository: findAll");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Driver.findAll()
                 .then(u => resolve(u))

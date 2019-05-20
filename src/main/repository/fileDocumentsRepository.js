@@ -1,11 +1,11 @@
 require("console-info");
 require("console-error");
 var db = require("../main");
-var FileDocuments = require("../domain/fileDocuments").FileDocuments;
+var FileDocuments = require("../domain/fileDocuments");
 
-exports.findAll = async function findAll() {
+exports.findAll = function findAll() {
     console.info("fileDocumentsRepository: findAll");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             FileDocuments.findAll()
                 .then(data => resolve(data))
@@ -20,9 +20,9 @@ exports.findAll = async function findAll() {
     });
 };
 
-exports.create = async function create(fileDocument) {
+exports.create = function create(fileDocument) {
     console.info("fileDocumentsRepository: create");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             FileDocuments.create({ name: fileDocument.name })
                 .then(us => resolve(us))

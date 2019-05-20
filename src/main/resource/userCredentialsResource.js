@@ -39,14 +39,12 @@ app.post("/userCredentials/login", function(req, res) {
         JSON.stringify(req.body)
     );
     try {
-        console.info(req.body);
         userCredentialsService
             .login(req.body.id)
-            .then(function(result) {
-                if (result != null && result.length == 1) {
+            .then(uc => {
+                if (uc != null) {
                     console.info("login successfuly");
-                    res
-                        .status(200)
+                    res.status(200)
                         .send(
                             JSON.stringify({ status: 200, message: "login successfuly" })
                         );

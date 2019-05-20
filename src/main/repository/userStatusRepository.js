@@ -1,12 +1,12 @@
 require("console-info");
 require("console-error");
 var db = require("../main");
-var UserState = require("../domain/userState").UserState;
+var UserState = require("../domain/userState");
 
-exports.searchAllUserStatus = async function searchAllUserStatus() {
+exports.searchAllUserStatus = function searchAllUserStatus() {
     console.info('userStatusRepository: searchAllUserStatus');
     console.log('WTF');
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         db.clientDB.query('SELECT * FROM USER_STATUS', function(err, result) {
             if (err) {
                 console.log("ERROR");
@@ -21,9 +21,9 @@ exports.searchAllUserStatus = async function searchAllUserStatus() {
     });
 };
 
-exports.findAll = async function findAll() {
+exports.findAll = function findAll() {
     console.info("userStatusRepository: findAll");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             UserState.findAll()
                 .then(data => resolve(data))
@@ -38,9 +38,9 @@ exports.findAll = async function findAll() {
     });
 };
 
-exports.create = async function create(userStatus) {
+exports.create = function create(userStatus) {
     console.info("userStatusRepository: create");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             UserState.create({ description: userStatus.description })
                 .then(us => resolve(us))

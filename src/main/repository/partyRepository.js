@@ -1,10 +1,10 @@
 require("console-info");
 require("console-error");
-var Party = require('../domain/party').Party;
+var Party = require('../domain/party');
 
-exports.create = async function create(party) {
+exports.create = function create(party) {
     console.info("PartyRepository: create");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Party.create({ party_id: party.partyID })
                 .then(p => resolve(p))
@@ -19,9 +19,9 @@ exports.create = async function create(party) {
     });
 };
 
-exports.find = async function find(id) {
+exports.find = function find(id) {
     console.info("PartyRepository: find :" + id);
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Party.findByPk(id)
                 .then(p => resolve(p))
@@ -36,9 +36,9 @@ exports.find = async function find(id) {
     });
 };
 
-exports.findAll = async function findAll() {
+exports.findAll = function findAll() {
     console.info("PartyRepository: findAll");
-    return await new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         try {
             Party.findAll()
                 .then(p => resolve(p))

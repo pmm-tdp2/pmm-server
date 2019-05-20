@@ -1,22 +1,15 @@
 "use strict";
 
+require("custom-env").env("pmm");
 var Sequelize = require("sequelize");
+var pg = require("pg");
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: "postgres",
-    protocol: "postgres",
-    ssl: true,
-    pool: {
-        max: 10,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    },
+var sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: "postgres"
 });
 
-var models = {};
+pg.types.setTypeParser(1114, function(stringValue) {
+    return new Date(stringValue + "+0300"); // ARG timezone
+});
 
-models.sequelize = sequelize;
-models.Sequelize = Sequelize;
-
-module.exports = models;
+module.exports = sequelize;
