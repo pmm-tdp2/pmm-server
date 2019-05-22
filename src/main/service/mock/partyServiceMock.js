@@ -66,11 +66,11 @@ console.log("cantidad de elementos mock pos: "+allDrivers.size);*/
 
 var geo = new travel.GeographicCoordenate({latitude:-34.689,longitude:-58.4345});
 allDrivers.set(1,geo);
-geo = new travel.GeographicCoordenate({latitude:-34.691,longitude:-58.4345});
+/*geo = new travel.GeographicCoordenate({latitude:-34.691,longitude:-58.4345});
 allDrivers.set(2,geo);
 geo = new travel.GeographicCoordenate({latitude:-34.690,longitude:-58.4345});
 allDrivers.set(3,geo);
-console.log("cantidad de elementos mock pos: "+allDrivers.size);
+console.log("cantidad de elementos mock pos: "+allDrivers.size);*/
 
 
 exports.allDriversMock = allDrivers;
