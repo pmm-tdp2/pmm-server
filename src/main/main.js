@@ -14,7 +14,7 @@ var partyResource = require("./resource/partyResource"),
     traceResource = require("./resource/traceResource"),
     fileDocumentsResource = require("./resource/fileDocumentsResource"),
     connectionModel = require("../main/model/connection")
-bodyParser = require("body-parser");
+    bodyParser = require("body-parser");
 
 var sequelize = require('./domain/sequelize');
 sequelize
@@ -80,6 +80,7 @@ sequelize
                     //adding driver to save his position for algorithm find driver for travel
                     exports.positionDrivers = positionDrivers.set(driverID, null);
                 }
+                console.log("response connect");
                 socket.emit("ROL_RESPONSE", connection.id);
             });
 
@@ -96,9 +97,10 @@ sequelize
                     connectionDrivers.delete(socket.id);
 
                     //delete driver for algorithm find driver for travel
-                    var connection = connectionDrivers.get(socket.id);
-                    positionDrivers.delete(connection.driverID);
+                    //var connection = connectionDrivers.get(socket.id);
+                    //positionDrivers.delete(connection.driverID);
                 }
+                console.log("disconnect");
                 socket.disconnect(true);
             });
             socket.emit("message", {

@@ -53,7 +53,6 @@ app.post("/travel/cotization", function (req, res) {
 
 app.post("/travel/cancel", function (req, res) {
 
-
     //TODO: edit DB travel
     
     //TODO: add score the driver with 0
@@ -70,15 +69,17 @@ app.post("/travel/cancel", function (req, res) {
     }
 
     //notify to user
-
     if (aConnectionUser == null || aConnectionUser == undefined) {
         console.error("There are no Users");
-        res.status(204).send({status:204, message:"There are not Users"});
+        res.status(203).send({status:203, message:"There are not Users"});
     } else {
         try {
             aConnectionUser.socket.emit("CANCEL_OF_TRAVEL", "soy un harcodeo");
-            res.status(200).send({status:200, messsage:"cancelation received successfully"});
+            console.log("SE MANDA LA CANCELACIÓN AL CHOFER");
+            res.status(200).send({status:200, message:"cancelation received successfully"});
+            console.log("LUEGO DE MANDAR LA CANCELACION");
         } catch (error) {
+            console.error(error);
             res.status(500).send(error);
         }
     }
@@ -90,151 +91,30 @@ managerTravelRequest = require("../service/travelRequestManagerService")
 app.post("/travel/confirmation", function (req, res) {
     console.info("TravelResource :" + "Verb : " + req.url+ ". Body : " + JSON.stringify(req.body));
     var aTravelConfirmationRequestDTO = new travelDTOModel.TravelConfirmationRequestDTO(req.body);
-    console.log("#######: "+JSON.stringify(aTravelConfirmationRequestDTO));
+    console.log("####message confirmation###: "+JSON.stringify(aTravelConfirmationRequestDTO));
     var connectionUsers = allSockets.connectionUsers;
     var connectionDrivers = allSockets.connectionDrivers;
     var aConnectionDriver = null;
     if (aTravelConfirmationRequestDTO.rol == "USER") {
 
-        // launch thread
         console.log("----solicitud de viaje----");
-        var value =1;
+
+        //res.status(200).send({status:200, message: "su chofer está en camino"});
+
+        // launch thread
+        /***
+         * Este comentario es sólo para mockear
+         */
         managerTravelRequest.manageTravelRequest(aTravelConfirmationRequestDTO.travelID)
         .then((value)=>{
             console.log("respuesta de manager: "+value);
-            //if(value == 0){
-                res.status(200).send({status:200, message: "su chofer está en camino"});
-            //}else if (value ==-1){
-                //res.status(400).send({status:400, message: "error"});
-            //}
+            res.status(200).send({status:200, message: "su chofer está en camino"});
         })
         .catch((value)=>{
             console.log("respuesta de manager: "+value);
             res.status(400).send({status:400, message: "No hay choferes en este momento"});
         })
         
-
-        
-        //the user has solicited a travel
-        /*var radiusA = 2000;
-        var radiusB = 4000;
-        var radiusC = 8000;
-        var radiusD = 12000;
-        var allRadius = [radiusA,radiusB,radiusC,radiusD];
-        var radiusSelected=radiusA;
-        var driverFound = false
-        var excludedDrivers = null
-        var indexRadius = 0;
-        var indexDrivers = 0;
-        var amountDriversNotified = 0;
-        var maxDriversNotified = 3
-
-        while(indexRadius < allRadius.length 
-            && !driverFound 
-            && amountDriversNotified < maxDriversNotified){
-
-            //select radius
-            radiusSelected = allRadius[indexRadius];
-            indexRadius++;
-
-            //obtain max 3 candidate drivers
-            var candidateDrivers = travelService
-                .findDriversToTravel(travelID,radiusSelected,excludedDrivers);
-
-            if(candidateDrivers != null && indexDrivers < candidateDrivers.length){
-
-                //drivers already ordering by priority and amount travels
-                var aDriverSelected = candidateDrivers[indexDrivers];
-                indexDrivers++;
-                amountDriversNotified++;
-
-                //obtaining socket of driver
-                try {
-                    if (connectionDrivers != undefined) {
-                        aConnectionDriver = connectionDrivers.values().next().value;
-                    }
-                } catch (err) {
-                    console.error(err);
-                }
-
-                //notify to driver if this is available
-                if (aConnectionDriver == null || aConnectionDriver == undefined) {
-                    console.error("There are not Drivers");
-                } else {
-
-                    console.info("Available Driver");
-                    // logica de mandar el emit al chofer
-                    var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
-                    
-                    // build DTO for driver
-                    var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
-                    aTravelNotificationDTO.travelID = aTravel.travelID;
-                    aTravelNotificationDTO.from = aTravel.from;
-                    aTravelNotificationDTO.to = aTravel.to;
-                    aTravelNotificationDTO.petAmountSmall = aTravel.petAmountSmall;
-                    aTravelNotificationDTO.petAmountMedium = aTravel.petAmountMedium;
-                    aTravelNotificationDTO.petAmountLarge = aTravel.petAmountLarge;
-                    aTravelNotificationDTO.hasACompanion = aTravel.hasACompanion;
-        
-                    //notify to driver
-                    aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
-
-                    
-
-                    //evaluate timer
-                }
-                    
-            }
-                 
-        }
-
-        //comming out of while
-        if(driverFound){
-            var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
-            aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
-            aTravelConfirmationResponseDTO.driver = travelService.findDriver(aConnectionDriver.id);
-            aTravelConfirmationResponseDTO.time = Math.round(aTravel.time);
-            res.status(200).send(aTravelConfirmationResponseDTO);
-        }else{
-            res.status(204).send({status:204, message:"There are not Drivers"});
-        }*/
-
-
-        /*try {
-            if (connectionDrivers != undefined) {
-                //aConnectionDriver = connectionDrivers.values().next().value;
-                var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
-                aConnectionDriver = travelService.findBetterDriver(aTravel);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-        if (aConnectionDriver == null || aConnectionDriver == undefined) {
-            console.error("There are not Drivers");
-            res.status(204).send({status:204, message:"There are not Drivers"});
-        } else {
-            console.info("Available Driver");
-            // logica de mandar el emit al chofer
-            var aTravel = travelService.findTravelByTravelID(aTravelConfirmationRequestDTO.travelID);
-            
-            var aTravelNotificationDTO = new travelDTOModel.TravelNotificationDTO();
-            aTravelNotificationDTO.travelID = aTravel.travelID;
-            aTravelNotificationDTO.from = aTravel.from;
-            aTravelNotificationDTO.to = aTravel.to;
-            aTravelNotificationDTO.petAmountSmall = aTravel.petAmountSmall;
-            aTravelNotificationDTO.petAmountMedium = aTravel.petAmountMedium;
-            aTravelNotificationDTO.petAmountLarge = aTravel.petAmountLarge;
-            aTravelNotificationDTO.hasACompanion = aTravel.hasACompanion;
-
-            aConnectionDriver.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelNotificationDTO);
-
-            var aTravelConfirmationResponseDTO = new travelDTOModel.TravelConfirmationResponseDTO();
-            aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
-            aTravelConfirmationResponseDTO.driver = travelService.findDriver(aConnectionDriver.id);
-            aTravelConfirmationResponseDTO.time = Math.round(aTravel.time);
-    
-            res.status(200).send(aTravelConfirmationResponseDTO);
-        }*/        
     }
     var aConnectionUser = null;
     if (aTravelConfirmationRequestDTO.rol == "DRIVER") {
@@ -248,17 +128,21 @@ app.post("/travel/confirmation", function (req, res) {
             responseOfDriverToTravels.set(aTravelConfirmationRequestDTO.travelID,true);
             console.log("&&&&&&&&&&&&&&&&&& travel is accepted &&&&&&&&&&&&&&&&&&");
             
-            //HARCODEOOOOOO
-            res.status(200).send({status:200, message:"viaje aceptado correctamente"});
+            /**
+             * HARCODEOOOOOO
+             * para probar desde postman
+             */
+            //res.status(200).send({status:200, message:"viaje aceptado correctamente"});
 
 
             //notify to user
-            /*try {
+            try {
                 if (connectionUsers != undefined) {
                     aConnectionUser = connectionUsers.values().next().value; 
                 }
             } catch (err) {
                 console.error(err);
+                res.status(400).send({status:400, message:"error inesperado"});
             }
             if (aConnectionUser == null || aConnectionUser == undefined) {
                 console.error("There are no Users");
@@ -274,15 +158,21 @@ app.post("/travel/confirmation", function (req, res) {
                     aTravelConfirmationResponseDTO.travelID = aTravel.travelID;
                     aTravelConfirmationResponseDTO.time = Math.round(aTravel.time);
                     aTravelConfirmationResponseDTO.driver = travelService.findDriver(aTravel.driverID)
+
+                    console.log("lo que se va mandar al usuario: "+JSON.stringify(aTravelConfirmationResponseDTO));
+
                     aConnectionUser.socket.emit("NOTIFICATION_OF_TRAVEL", aTravelConfirmationResponseDTO);
     
+                    console.log("Se mandó al usuario ");
+
                     aTravelConfirmationResponseDTO.driver = null;
                     aTravelConfirmationResponseDTO.user = travelService.findUser(aTravel.userID)
+                    aTravelConfirmationResponseDTO
                     res.status(200).send(aTravelConfirmationResponseDTO);
                 } catch (error) {
                     res.status(500).send(error);
                 }
-            }*/
+            }
         }
     }
 });
