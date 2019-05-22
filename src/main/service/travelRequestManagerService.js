@@ -52,7 +52,7 @@ function manageTravelRequest(travelID){
         var REJECT_DRIVER_REQUEST = 1;
         var REJECT_TIMEOUT = 2;
         var REJECT_DRIVER_NO_FOUND = 3;
-        var REJECT_RISE_RADIUS = 4;
+        var RESOLVE_DRIVER_ACCEPT = 4;
         var responseOfDriverToTravels = travelResource.responseOfDriverToTravels;
     
         function bucleFunction(indexRadius,amountDriversNotified){
@@ -142,7 +142,9 @@ function manageTravelRequest(travelID){
 
                                         if (amountIterations <= 0){
                                             //Timeout
-                                            rejectTimeout(REJECT_TIMEOUT);
+                                            //add driver to exlude drivers
+                                            excludedDrivers.push(aDriverSelected.id);
+                                            resolveTimeout(REJECT_TIMEOUT);
                                         }else{
                                             console.log("evaluando si responde el chofer ");
                                             if(responseOfDriverToTravels.has(travelID)){
@@ -152,13 +154,13 @@ function manageTravelRequest(travelID){
                                                 responseOfDriverToTravels.delete(travelID);
                                                 if(response){
                                                     console.log("el chofer ACEPTO EL VIAJE");
-                                                    resolveTimeout(true);
+                                                    resolveTimeout(RESOLVE_DRIVER_ACCEPT);
                                                 }else{
                                                     //agregar el chofer para excluirlo de la búsqueda
                                                     //seguir buscando otros choferes
                                                     console.log("el chofer RECHAZO");
                                                     excludedDrivers.push(aDriverSelected.id);
-                                                    resolveTimeout(false);
+                                                    resolveTimeout(REJECT_DRIVER_REQUEST);
                                                 }
                                             }else{
                                                 //si aún no responde seguir iterando
@@ -166,9 +168,6 @@ function manageTravelRequest(travelID){
                                                 waitResponseDriver(--amountIterations)
                                                 .then((dataResponse)=>{
                                                     resolveTimeout(dataResponse);
-                                                })
-                                                .catch((data)=>{
-                                                    rejectTimeout(data);
                                                 })
                                             }
                                         }
@@ -180,22 +179,23 @@ function manageTravelRequest(travelID){
                         //llamando a waitResponseDriver por primera vez
                         waitResponseDriver(AMOUNT_BUCLES_TO_WAIT)
                         .then((dataResponse)=>{
-                            if(dataResponse==true){
+                            if(dataResponse==RESOLVE_DRIVER_ACCEPT){
                                 console.log("El ciclo terminó y el chofer aceptó el viaje");
                                 //resolve(dataResponse);
                                 resolveBucle(dataResponse);
-                            }else{
-                                console.log("El ciclo terminó y el chofer rechazó el viaje");
-                                //reject(REJECT_DRIVER_REQUEST);
-                                //rejectBucle(REJECT_DRIVER_REQUEST);
-                
+                            }else {
+                                if(dataResponse==REJECT_DRIVER_REQUEST)
+                                    console.log("El ciclo terminó y el chofer rechazó el viaje");
+    
+                                if(dataResponse == REJECT_TIMEOUT)
+                                    console.log("El ciclo terminó y el chofer no contestó");    
+                    
                                 if( amountDriversNotified >= MAXDRIVERSNOTIFICATIONS || indexRadius >= allRadius.length-1 ){
                                     //reject(REJECT_DRIVER_NO_FOUND);
                                     console.log("===  se superó el radio o max de rechazos ===");
                                     rejectBucle(REJECT_DRIVER_NO_FOUND);
                                 }else{
-                                    //driver reject travel
-                                    //bucleFunction(indexRadius,++amountDriversNotified)
+                                    //keep searching drivers
                                     bucleFunction(indexRadius,++amountDriversNotified)
                                     .then((value)=>{
                                         if(value) {
@@ -211,13 +211,8 @@ function manageTravelRequest(travelID){
                                     });
 
                                 }
-
                             }
-                        })
-                        .catch((data)=>{
-                            //reject(REJECT_TIMEOUT);
-                            //timeout
-                            rejectBucle(data);
+                        
                         });
 
                     }
@@ -256,12 +251,12 @@ function manageTravelRequest(travelID){
             resolve(value);
         })
         .catch((value)=>{
-            if(value == REJECT_TIMEOUT){
+            /*if(value == REJECT_TIMEOUT){
                 console.log("<<<<<<<<< saliendo de la búsqueda por timeout");
                 //evaluar si se puede seguir buscando...
                 reject(value);
             }
-            else if(value == REJECT_ERROR){
+            else*/ if(value == REJECT_ERROR){
                 console.log("<<<<<<<<< saliendo de la búsqueda por un error");
                 reject(value);
             }
