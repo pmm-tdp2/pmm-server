@@ -251,12 +251,7 @@ function manageTravelRequest(travelID){
             resolve(value);
         })
         .catch((value)=>{
-            /*if(value == REJECT_TIMEOUT){
-                console.log("<<<<<<<<< saliendo de la búsqueda por timeout");
-                //evaluar si se puede seguir buscando...
-                reject(value);
-            }
-            else*/ if(value == REJECT_ERROR){
+            if(value == REJECT_ERROR){
                 console.log("<<<<<<<<< saliendo de la búsqueda por un error");
                 reject(value);
             }
@@ -300,7 +295,7 @@ function findBestDriver(travelID, searchRadius, excludedDrivers){
         //find the travel to obtain origin of travel
         var aTravel = travelService.findTravelById(travelID);
 
-        var candidateDrivers = new Array();
+        var candidateDrivers = [];
 
         positionsDrivers.forEach( (value, key) => {
             distance = haversine(value, aTravel.from,{unit: 'meter'});
@@ -346,37 +341,23 @@ function findBestDriver(travelID, searchRadius, excludedDrivers){
             console.log("Luego de haber excluido quedaron: "+candidateDrivers.length +" choferes");
         }
 
-        //ordering drivers in descending order
-        //atribiute priority is score + pointsCategory
-        candidateDrivers.sort( function (a,b){
-            return b.priority - a.priority;
-        });
-
-
-        //returns the best driver
-        /*var driver1 = null;
-        var driver2 = null;
-        var bestDriver = null;*/
-
-        /*candidateDrivers.forEach(driver => {
-            if(driver1 == null){
-                driver1 = driver;
-                bestDriver = driver1;
-            }else if(driver2 == null){
-                driver2 =  driver;
-                if(driver1.priority > driver2.priority)
-                    return driver1;
-                else if(driver1.priority < driver2.priority)
-                    return driver2;
+        function getBestDriver(){
+            var bestDriver = null;
+            candidateDrivers.forEach(driver => {
+                if(bestDriver == null)
+                    bestDriver = driver;
                 else{
-                    driver1.amountTravels > driver2.amountTravels
+                    if(bestDriver.priority < driver.priority)
+                        bestDriver = driver;
+                    else if (bestDriver.priority === driver.priority
+                        && bestDriver.amountTravels <= driver.amountTravels)
+                        bestDriver = driver;
                 }
-            }
-        });*/
+            });
+            return bestDriver;
+        }
 
-        // por ahora solo mando el mejor posicionado por priordidad luego se optimiza
-
-        return candidateDrivers[0];
+        return getBestDriver();
 }
 
 module.exports={
